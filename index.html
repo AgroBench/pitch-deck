@@ -1,3 +1,7 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
 <title>AgroBench</title>
 <meta name="description" content="Benchmarking regional de custo agrícola com dados anonimizados e recompensa em blockchain." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -240,12 +244,21 @@
   .barrier p{ font-size:12.5px; color:var(--ink-dim); margin:0; }
 
   /* -- limits -- */
-  .limits{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+  .limits{ display:grid; grid-template-columns:1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
   @media (max-width:700px){ .limits{ grid-template-columns:1fr; } }
   .limit{ background:var(--surface); padding:24px; }
   .limit .num{ font-family:"IBM Plex Mono",monospace; color:var(--warn); font-size:12px; margin-bottom:10px; }
   .limit h4{ font-size:15px; margin-bottom:8px; }
   .limit p{ font-size:13px; color:var(--ink-dim); }
+
+  /* -- equipe -- */
+  .team{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  @media (max-width:900px){ .team{ grid-template-columns:1fr; } }
+  .person{ border:1px solid var(--line); border-radius:16px; padding:22px 20px; background:var(--surface); display:flex; flex-direction:column; gap:8px; }
+  .person .role{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); }
+  .person h3{ font-size:17px; }
+  .person p{ font-size:13px; color:var(--ink-dim); margin:0; }
+  .person .stack{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
 
   /* -- closing -- */
   .closing h2{ font-size:clamp(30px,5vw,54px); max-width:14ch; }
@@ -269,11 +282,13 @@
     .slide-inner{ margin:0 auto; }
   }
 </style>
+</head>
+<body>
 
-<div class="progress" id="progress" style="width:7.1%"></div>
+<div class="progress" id="progress" style="width:10%"></div>
 <div class="topbar">
   <div class="brand"><span class="mark"></span>AgroBench</div>
-  <div class="counter mono"><span id="cur">01</span> / <span id="tot">14</span></div>
+  <div class="counter mono"><span id="cur">01</span> / <span id="tot">10</span></div>
 </div>
 
 <div class="deck-viewport">
@@ -319,43 +334,59 @@
       </div>
     </section>
 
-    <!-- 3 · MERCADO -->
+    <!-- 3 · Solução -->
     <section class="slide">
       <div class="slide-inner">
         <div class="section-head">
-          <div class="eyebrow">Mercado</div>
-          <h2>Um dado que hoje ninguém compila de forma estruturada.</h2>
-          <p>O custo real por insumo, por produtor, atualizado a cada safra — é o que falta para precificar R$ 605,2 bilhões de crédito rural com dado real.</p>
+          <div class="eyebrow">A solução</div>
+          <h2>O produtor contribui cifrado, compara de graça e recebe em USDC.</h2>
+          <p>O produtor contribui dado cifrado; o sistema valida e agrega por região; ele vê de graça <strong>como se compara</strong> — e instituições pagam para consultar o mesmo agregado, receita que volta <strong>automaticamente</strong> para quem contribuiu.</p>
         </div>
-        <div class="stat-row">
-          <div class="stat">
-            <div class="label">TAM</div>
-            <div class="num">R$ 605,2<small>bi / safra</small></div>
-            <p>Crédito rural do Plano Safra 25/26, limitado hoje pela falta de dado de custo e produtividade regional.</p>
+        <div class="callout">
+          <div class="callout-list">
+            <div class="callout-item"><span class="ico">01</span><p><strong>Para o produtor, é só “criei uma conta”.</strong> Login com e‑mail, telefone, senha (argon2id) e MFA SMS. A wallet Solana é gerada no app; o backend guarda só a pubkey + blob cifrado — <em>nunca</em> a chave privada.</p></div>
+            <div class="callout-item"><span class="ico">02</span><p><strong>CPF, CAR e CNPJ nunca vão on‑chain.</strong> Só HMAC‑SHA256 com pepper (lookup e CAR). Nome e endereço civil não entram no payload. Gas das transações é pago pelo protocolo.</p></div>
+            <div class="callout-item"><span class="ico">03</span><p><strong>Chave exportável, sem seed phrase.</strong> Recuperação via blob cifrado + SMS. Quando quiser, o produtor assume controle total da wallet.</p></div>
+            <div class="callout-item"><span class="ico">04</span><p><strong>Recompensa já no 1º ciclo aceito.</strong> Base 5 USDC × 1 / 2 / 3,5 conforme o nível (5 / 10 / 17,5). Todo mês o pool (assinaturas) é fatiado por consultas pagas e pelo peso da contribuição.</p></div>
           </div>
-          <div class="stat">
-            <div class="label">SAM</div>
-            <div class="num">Sul · Sudeste</div>
-            <p>Bancos, seguradoras e cooperativas que precificam risco agrícola e pagariam por dado agregado atualizado.</p>
-          </div>
-          <div class="stat">
-            <div class="label">SOM</div>
-            <div class="num">Passo Fundo</div>
-            <p>Cooperativas e bancos do RS — base de produtores recrutada primeiro, cobertura relevante por cultura.</p>
+          <div class="id-card">
+            <div class="headrow"><span class="dot-lg"></span><span>Sessão do produtor</span></div>
+            <div class="row"><span class="k">Login</span><span class="v">e‑mail + telefone + MFA</span></div>
+            <div class="row"><span class="k">CPF</span><span class="v">HMAC‑SHA256</span></div>
+            <div class="row"><span class="k">Wallet</span><span class="v">7xKX…Qm3a · só pubkey</span></div>
+            <div class="row"><span class="k">Gas (SOL)</span><span class="v">pago pelo protocolo</span></div>
+            <div class="row"><span class="k">Safra atual</span><span class="v">soja · 50 ha</span></div>
+            <div class="row"><span class="k">Recompensa acumulada</span><span class="v">128,40 USDC</span></div>
           </div>
         </div>
+        <div class="tiers" style="margin-top:22px">
+          <div class="tier">
+            <span class="tier-label">Nível básico · 1× · 5 USDC</span>
+            <h3>Contribuição mínima</h3>
+            <div class="reward-bar"><i style="width:28%"></i></div>
+            <span class="reward-label">recompensa base · o que o painel grátis mostra</span>
+            <ul><li>Cultura plantada e área total</li><li>Custo total da safra, agregado</li></ul>
+          </div>
+          <div class="tier">
+            <span class="tier-label">Nível intermediário · 2× · 10 USDC</span>
+            <h3>Dado mais raro</h3>
+            <div class="reward-bar"><i style="width:62%"></i></div>
+            <span class="reward-label">recompensa maior</span>
+            <ul><li>Custo por insumo</li><li>Produtividade por hectare</li><li>Data de plantio e colheita</li><li>Fornecedor por insumo — nunca exposto, só entra na média regional</li></ul>
+          </div>
+          <div class="tier advanced">
+            <span class="tier-label">Nível avançado · 3,5× · 17,5 USDC</span>
+            <h3>Alto valor para risco</h3>
+            <div class="reward-bar"><i style="width:100%"></i></div>
+            <span class="reward-label">recompensa mais alta · só no relatório pago</span>
+            <ul><li>Solo e rotação de cultura</li><li>Irrigação e mecanização</li><li>Pragas, doenças e manejo</li><li>Perdas por evento climático</li></ul>
+          </div>
+        </div>
+        <div class="thesis">A distribuição do pool pondera granularidade <em>e</em> raridade: cultura ou região sub‑representada divide uma fatia maior por wallet. 1 contribuição ativa por wallet por ciclo; rejeitada permite 1 nova tentativa (stake 10 USDC continua travado).</div>
       </div>
     </section>
 
-    <!-- 4 · FRASE 1 -->
-    <section class="slide">
-      <div class="slide-inner">
-        <div class="eyebrow">Como funciona, em uma frase</div>
-        <p class="quote">O produtor contribui dado cifrado; o sistema valida e agrega por região; ele vê de graça <span class="accent-word">como se compara</span> — e instituições pagam para consultar o mesmo agregado, receita que volta <span class="accent-word2">automaticamente</span> para quem contribuiu.</p>
-      </div>
-    </section>
-
-    <!-- 5 · PRODUTO -->
+    <!-- 4 · PRODUTO (ex-5) -->
     <section class="slide">
       <div class="slide-inner">
         <div class="section-head">
@@ -373,21 +404,21 @@
                 <tr><td>Produtividade</td><td>72 sc/ha</td><td>68,5 sc/ha</td><td class="down">+5%</td></tr>
               </tbody>
             </table>
-            <div class="foot">Agregado de 14 propriedades · média e mediana · nenhum valor individual exposto</div>
+            <div class="foot">Agregado de 14 propriedades · média e mediana · nenhum valor individual exposto · seed-demo Passo Fundo × soja</div>
           </div>
           <div class="callout-list">
             <div class="callout-item"><span class="ico">01</span><p><strong>Adubo 25% acima da média regional.</strong> É o argumento concreto que o produtor leva ao fornecedor na próxima compra.</p></div>
-            <div class="callout-item"><span class="ico">02</span><p><strong>Produtor vê só o nível básico.</strong> Solo, rotação e perdas climáticas existem apenas no relatório pago da instituição.</p></div>
-            <div class="callout-item"><span class="ico">03</span><p><strong>Instituição vê o mesmo agregado, completo.</strong> Custo, produtividade e risco por região × cultura, atualizados a cada safra.</p></div>
+            <div class="callout-item"><span class="ico">02</span><p><strong>Produtor vê só o nível básico</strong> — e só após 3 ciclos consecutivos aceitos na mesma cultura × região. Solo, rotação e perdas climáticas existem apenas no relatório pago da instituição.</p></div>
+            <div class="callout-item"><span class="ico">03</span><p><strong>Instituição vê o mesmo agregado, completo.</strong> Custo, produtividade e risco por região × cultura. Planos no MVP: regional (500 USDC, até 5 microrregiões) e national (2000 USDC). CNPJ → pending → admin aprova.</p></div>
           </div>
         </div>
-        <div class="demo-flow">na demo:
+        <div class="demo-flow">na demo (ports mock):
           <span class="pill">Início</span>→<span class="pill">Produtor · ciclo 1 (painel bloqueado, recompensa base paga)</span>→<span class="pill">Produtor · 3 ciclos (painel liberado)</span>→<span class="pill">Instituição (relatório completo)</span>
         </div>
       </div>
     </section>
 
-    <!-- 6 · ARQUITETURA: diagrama -->
+    <!-- 5 · DIAGRAMA (ex-6) -->
     <section class="slide">
       <div class="slide-inner">
         <div class="section-head">
@@ -487,12 +518,12 @@
             <span><i style="background:var(--warn)"></i> custos de operação + taxa dos mantenedores</span>
             <span><i style="background:var(--muted); background-image:repeating-linear-gradient(90deg,var(--muted) 0 4px,transparent 4px 7px)"></i> consulta gratuita</span>
           </div>
-          <div class="diagram-caption">O dado bruto é decifrado uma única vez, dentro do TEE. Do pool, o contrato desconta primeiro a infraestrutura (TEE, validação, gas de todas as transações — inclusive o que o produtor não paga) e a % fixa dos mantenedores; o saldo volta à wallet do produtor por duas rotas.</div>
+          <div class="diagram-caption">O dado bruto é decifrado uma única vez, dentro do TEE. Do pool, o contrato desconta primeiro a infraestrutura (TEE, validação, gas de todas as transações — inclusive o que o produtor não paga) e a % fixa dos mantenedores; o saldo volta à wallet do produtor por duas rotas. Defaults: infra 2 USDC/contribuição e 15% dos mantenedores. Na demo de banca o fluxo roda com ports mock — adapters reais (Solana devnet, Stripe test, Nitro) estão semi-prontos; não é mainnet nem TEE em produção.</div>
         </div>
       </div>
     </section>
 
-    <!-- 7 · ARQUITETURA: etapas -->
+    <!-- 6 · ARQUITETURA -->
     <section class="slide">
       <div class="slide-inner">
         <div class="section-head">
@@ -500,148 +531,122 @@
           <h2>Da coleta ao pagamento, sem um único ponto de exposição.</h2>
         </div>
         <div class="step-grid">
-          <div class="step"><span class="n">01</span><h4>Coleta</h4><p>Identidade é só a wallet. Localização entra generalizada para microrregião, nunca coordenada — sem re‑identificação por satélite ou registro de imóvel.</p></div>
-          <div class="step"><span class="n">02</span><h4>Commit‑reveal</h4><p>Hash do dado vai on‑chain antes da validação — elimina o viés de só enviar o que "passaria".</p></div>
-          <div class="step"><span class="n">03</span><h4>TEE</h4><p>Payload cifrado só é decifrado dentro do enclave. Nem o operador da infraestrutura vê o texto puro.</p></div>
-          <div class="step"><span class="n">04</span><h4>Cruzamento</h4><p>Dado declarado é checado contra CONAB e sensoriamento remoto — divergências são rejeitadas.</p></div>
-          <div class="step"><span class="n">05</span><h4>Agregação</h4><p>Só média e mediana por região × cultura × período saem — nunca o valor individual.</p></div>
-          <div class="step"><span class="n">06</span><h4>Atestação</h4><p>Validador assina on‑chain e libera a recompensa base direto na wallet do produtor.</p></div>
+          <div class="step"><span class="n">01</span><h4>Coleta</h4><p>Identidade on‑chain é só a pubkey. Localização entra como microrregião IBGE, nunca coordenada. CPF/CAR/CNPJ ficam em HMAC‑SHA256 — sem re‑identificação por satélite ou registro de imóvel.</p></div>
+          <div class="step"><span class="n">02</span><h4>Commit‑reveal</h4><p>Commit = SHA‑256 do JSON canônico, publicado antes do reveal. Reveal manda ciphertext (NaCl sealed box, x25519). Elimina o viés de só enviar o que “passaria”.</p></div>
+          <div class="step"><span class="n">03</span><h4>TEE / enclave</h4><p>Decifra uma vez, dentro do enclave. Demo: mock com o mesmo motor <span class="mono">validate</span>. Real: AWS Nitro (adapter pronto). Não é TEE em produção — no mock o processo da API ainda vê o payload.</p></div>
+          <div class="step"><span class="n">04</span><h4>Oráculos</h4><p>SICAR: CAR existe, está ativo e não ligado a outra wallet (resultado on‑chain, nunca o CAR). CONAB: faixas de custo e produtividade. Divergência rejeita. 1 retry no ciclo.</p></div>
+          <div class="step"><span class="n">05</span><h4>Agregação</h4><p>Admin abre/fecha o ciclo (safra × cultura × microrregião). Fechar dispara média e mediana por nível. Nunca sai o valor individual. Split do pool é job mensal, à parte.</p></div>
+          <div class="step"><span class="n">06</span><h4>Atestação + chain</h4><p>Atestação + 5 USDC × multiplicador na wallet. Mock grava no Postgres; real = Solana devnet, Memo program, USDC‑SPL da treasury. <span class="mono">LockStake</span> on‑chain real ainda não existe — no mock o stake é no banco.</p></div>
         </div>
+        <div class="barriers" style="margin-top:22px">
+          <div class="barrier"><div class="num">01</div><h4>Prova de contribuição real</h4><p>Painel grátis só com atestação de dado validado naquele ciclo. Wallet vazia não vê nada.</p></div>
+          <div class="barrier"><div class="num">02</div><h4>CAR via SICAR</h4><p>Checagem uma vez, fora da cadeia. Precisa existir, estar ativo e livre. Só o resultado (aprovado/rejeitado) é registrado.</p></div>
+          <div class="barrier"><div class="num">03</div><h4>Stake 10 USDC</h4><p>Travado no 1º commit. Devolve após 2 ciclos consecutivos aceitos. Rejeição zera a contagem. Sai mais barato assinar o plano pago.</p></div>
+          <div class="barrier"><div class="num">04</div><h4>Carência de 3 ciclos</h4><p>Recompensa base já no 1º aceito. O painel grátis só abre após 3 ciclos seguidos, mesma cultura × região.</p></div>
+          <div class="barrier"><div class="num">05</div><h4>Grátis nunca mostra o valioso</h4><p>Painel do produtor = só nível básico. Solo, rotação e perdas climáticas só no relatório pago.</p></div>
+        </div>
+        <div class="thesis">Identidade (wallet) e conteúdo (dado agrícola) nunca se tocam fora do enclave — e cada contribuição gera um incentivo direto, recorrente e em dinheiro.</div>
       </div>
     </section>
 
-    <!-- 8 · ONBOARDING -->
+    <!-- 7 · MERCADO -->
     <section class="slide">
       <div class="slide-inner">
         <div class="section-head">
-          <div class="eyebrow">Onboarding</div>
-          <h2>Para o produtor, é só "criei uma conta".</h2>
+          <div class="eyebrow">Mercado</div>
+          <h2>Um dado que hoje ninguém compila de forma estruturada.</h2>
+          <p>O custo real por insumo, por produtor, atualizado a cada safra — é o que falta para precificar R$ 605,2 bilhões de crédito rural com dado real.</p>
         </div>
-        <div class="callout">
-          <div class="callout-list">
-            <div class="callout-item"><span class="ico">01</span><p><strong>Wallet criada em segundo plano</strong> no primeiro acesso, vinculada ao login por e‑mail, telefone e CPF.</p></div>
-            <div class="callout-item"><span class="ico">02</span><p><strong>CPF nunca vai on‑chain.</strong> Existe só como hash irreversível, para recuperação de conta e verificação de CAR.</p></div>
-            <div class="callout-item"><span class="ico">03</span><p><strong>Chave privada custodiada de forma assistida</strong> — cifrada no dispositivo, recuperável por SMS, sem seed phrase. Exportável: o produtor assume controle total quando quiser.</p></div>
-            <div class="callout-item"><span class="ico">04</span><p><strong>Gas é pago pelo protocolo.</strong> O produtor nunca precisa ter SOL na carteira.</p></div>
+        <div class="stat-row">
+          <div class="stat">
+            <div class="label">TAM</div>
+            <div class="num">R$ 605,2<small>bi / safra</small></div>
+            <p>Crédito rural do Plano Safra 25/26, limitado hoje pela falta de dado de custo e produtividade regional.</p>
           </div>
-          <div class="id-card">
-            <div class="headrow"><span class="dot-lg"></span><span>Sessão do produtor</span></div>
-            <div class="row"><span class="k">Login</span><span class="v">e‑mail + telefone</span></div>
-            <div class="row"><span class="k">CPF</span><span class="v">••••••••••‑hash</span></div>
-            <div class="row"><span class="k">Wallet</span><span class="v">7xKX…Qm3a</span></div>
-            <div class="row"><span class="k">Gas (SOL)</span><span class="v">pago pelo protocolo</span></div>
-            <div class="row"><span class="k">Safra atual</span><span class="v">soja · 50 ha</span></div>
-            <div class="row"><span class="k">Recompensa acumulada</span><span class="v">128,40 USDC</span></div>
+          <div class="stat">
+            <div class="label">SAM</div>
+            <div class="num">Sul · Sudeste</div>
+            <p>Bancos, seguradoras e cooperativas que precificam risco agrícola e pagariam por dado agregado atualizado.</p>
+          </div>
+          <div class="stat">
+            <div class="label">SOM</div>
+            <div class="num">Passo Fundo</div>
+            <p>Cooperativas e bancos do RS — base de produtores recrutada primeiro, cobertura relevante por cultura.</p>
           </div>
         </div>
+        <div class="thesis">Quem paga o dado é a instituição, não o produtor. Planos da demo: <strong>regional 500 USDC</strong> (até 5 microrregiões) e <strong>national 2000 USDC</strong>. O net do mês (após 15% + 2 USDC/contribuição) é fatiado pelas consultas do relatório (<span class="mono">report_access</span>) e, dentro do agregado, pelos pesos 1× / 2× / 3,5×.</div>
       </div>
     </section>
 
-    <!-- 9 · MODELO DE DADOS -->
+    <!-- 8 · EQUIPE -->
     <section class="slide">
       <div class="slide-inner">
         <div class="section-head">
-          <div class="eyebrow">Modelo de dados</div>
-          <h2>Quanto mais granular, maior a recompensa.</h2>
+          <div class="eyebrow">Equipe</div>
+          <h2>Backend, frontend e design no mesmo produto.</h2>
+          <p>Três pessoas — a API, a interface e o design da demo de banca.</p>
         </div>
-        <div class="tiers">
-          <div class="tier">
-            <span class="tier-label">Nível básico</span>
-            <h3>Contribuição mínima</h3>
-            <div class="reward-bar"><i style="width:28%"></i></div>
-            <span class="reward-label">recompensa base</span>
-            <ul><li>Cultura plantada e área total</li><li>Custo total da safra, agregado</li></ul>
+        <div class="team">
+          <div class="person">
+            <span class="role">Backend</span>
+            <h3>Felipe Meneguzzi</h3>
+            <p>Go — Postgres, River, Solana devnet, Stripe, Twilio.</p>
+            <div class="stack">
+              <span class="pill">Go</span><span class="pill">Postgres</span><span class="pill">River</span><span class="pill">Solana devnet</span><span class="pill">Stripe</span><span class="pill">Twilio</span>
+            </div>
           </div>
-          <div class="tier">
-            <span class="tier-label">Nível intermediário</span>
-            <h3>Dado mais raro</h3>
-            <div class="reward-bar"><i style="width:62%"></i></div>
-            <span class="reward-label">recompensa maior</span>
-            <ul><li>Custo por insumo</li><li>Produtividade por hectare</li><li>Data de plantio e colheita</li><li>Fornecedor por insumo — nunca exposto, só entra na média regional</li></ul>
+          <div class="person">
+            <span class="role">Frontend</span>
+            <h3>Pablo Oliveira</h3>
+            <p>Frontend do produto: Vue 3 + Vite, Vuetify e Axios.</p>
+            <div class="stack">
+              <span class="pill">Vue 3 + Vite</span><span class="pill">Vuetify</span><span class="pill">Axios</span>
+            </div>
           </div>
-          <div class="tier advanced">
-            <span class="tier-label">Nível avançado</span>
-            <h3>Alto valor para risco</h3>
-            <div class="reward-bar"><i style="width:100%"></i></div>
-            <span class="reward-label">recompensa mais alta</span>
-            <ul><li>Solo e rotação de cultura</li><li>Irrigação e mecanização</li><li>Pragas, doenças e manejo</li><li>Perdas por evento climático</li></ul>
-          </div>
-        </div>
-        <div class="thesis">A distribuição do pool pondera granularidade <em>e</em> raridade: cultura ou região sub‑representada divide uma fatia maior por wallet.</div>
-      </div>
-    </section>
-
-    <!-- 10 · BARREIRA -->
-    <section class="slide">
-      <div class="slide-inner">
-        <div class="section-head">
-          <div class="eyebrow">Contra fraude</div>
-          <h2>Grátis para quem contribui — não para quem só quer olhar.</h2>
-        </div>
-        <div class="barriers">
-          <div class="barrier"><div class="num">01</div><h4>Prova de contribuição real</h4><p>Acesso liberado só por atestação on‑chain de dado validado naquele ciclo.</p></div>
-          <div class="barrier"><div class="num">02</div><h4>CAR via SICAR</h4><p>Checado uma vez, fora da cadeia: precisa existir, estar ativo e não estar ligado a outra wallet. Só o resultado vai on‑chain.</p></div>
-          <div class="barrier"><div class="num">03</div><h4>Staking reembolsável</h4><p>Depósito em USDC devolvido após validação em ciclos consecutivos — sai mais barato assinar o plano pago.</p></div>
-          <div class="barrier"><div class="num">04</div><h4>Carência de 3 ciclos</h4><p>Recompensa base já no 1º ciclo; o painel grátis só abre após três ciclos seguidos com dado validado.</p></div>
-          <div class="barrier"><div class="num">05</div><h4>Grátis nunca mostra o valioso</h4><p>Solo, rotação e perdas climáticas só existem no relatório pago.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 11 · FRASE 2 -->
-    <section class="slide">
-      <div class="slide-inner">
-        <div class="eyebrow">Por que funciona</div>
-        <p class="quote">Identidade <span class="accent-word2">(wallet)</span> e conteúdo <span class="accent-word">(dado agrícola)</span> nunca se tocam fora do enclave — e cada contribuição gera um incentivo direto, recorrente e em dinheiro.</p>
-      </div>
-    </section>
-
-    <!-- 12 · LIMITAÇÕES -->
-    <section class="slide">
-      <div class="slide-inner">
-        <div class="section-head">
-          <div class="eyebrow">Limitações assumidas</div>
-          <h2>Duas escolhas deliberadas, não escondidas.</h2>
-        </div>
-        <div class="limits">
-          <div class="limit">
-            <div class="num">01</div>
-            <h4>O TEE é pseudonimização com garantia de hardware, não prova criptográfica plena.</h4>
-            <p>Evolução prevista: aprendizado federado — o modelo treina no dispositivo do produtor e só os pesos saem da propriedade.</p>
-          </div>
-          <div class="limit">
-            <div class="num">02</div>
-            <h4>Existe um vínculo CPF → wallet, guardado como hash.</h4>
-            <p>Único ponto de identidade real, sujeito à LGPD. Modelo de recompensa em cripto passará por análise junto à CVM e ao Banco Central.</p>
+          <div class="person">
+            <span class="role">Designer e Frontend</span>
+            <h3>Gabriela Lenz</h3>
+            <p>Design e frontend do produto.</p>
+            <div class="stack">
+              <span class="pill">Designer</span><span class="pill">Frontend</span>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 13 · PRÓXIMOS PASSOS -->
+    <!-- 9 · PRÓXIMOS PASSOS -->
     <section class="slide">
       <div class="slide-inner">
         <div class="section-head">
           <div class="eyebrow">Próximos passos</div>
-          <h2>Do MVP ao piloto — e o que vem depois.</h2>
+          <h2>Do MVP ao piloto.</h2>
         </div>
         <div class="roadmap">
           <div class="step"><span class="n">01 · piloto</span><h4>Passo Fundo e microrregião</h4><p>Cooperativas e bancos regionais do RS como primeira base: produtores suficientes para um agregado estatisticamente relevante por cultura.</p></div>
           <div class="step"><span class="n">02 · antes de produção</span><h4>Enquadramento regulatório</h4><p>LGPD para o vínculo CPF → wallet (base legal, finalidade restrita, direito de exclusão) e análise do modelo de recompensa junto à CVM e ao Banco Central.</p></div>
           <div class="step"><span class="n">03 · evolução</span><h4>Aprendizado federado</h4><p>Substitui o TEE na validação: o modelo treina no dispositivo do produtor e só os pesos saem da propriedade. Nenhuma parte vê o dado bruto.</p></div>
         </div>
+        <div class="limits" style="margin-top:22px">
+          <div class="limit">
+            <div class="num">Limitação do MVP</div>
+            <h4>Existe um vínculo CPF → wallet, guardado como HMAC‑SHA256.</h4>
+            <p>Único ponto de identidade real, sujeito à LGPD. Recompensa em cripto passa por CVM e Banco Central. Adapters reais são semi-prontos: <span class="mono">LockStake</span> Solana = não implementado; URLs SICAR/CONAB ainda TODO.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 14 · ENCERRAMENTO -->
+    <!-- 10 · CTA -->
     <section class="slide closing">
       <div class="slide-inner">
         <div class="eyebrow">AgroBench</div>
         <h2>O dado que faltava para precificar o campo — sem expor quem planta.</h2>
-        <p class="lede">MVP construído para demonstração de banca. O piloto começa onde a base de produtores já existe: Passo Fundo.</p>
+        <p class="lede">MVP construído para demonstração de banca. O ciclo completo já roda (com mocks). O piloto começa onde a base de produtores já existe: Passo Fundo.</p>
         <div class="closing-meta">
           <span class="pill">Passo Fundo, RS</span>
           <span class="pill">Solana · TEE · USDC‑SPL</span>
+          <span class="pill">peçam a demo</span>
         </div>
       </div>
     </section>
@@ -738,3 +743,5 @@
   if (hash){ goTo(parseInt(hash[1], 10) - 1); } else { render(); }
 })();
 </script>
+</body>
+</html>
