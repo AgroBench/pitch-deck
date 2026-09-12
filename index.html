@@ -26,8 +26,8 @@
     --muted: #9a9c86;
     --line: rgba(244,241,228,0.11);
     --line-strong: rgba(244,241,228,0.22);
-    --accent: #dcac4d;        /* grão / valor / recompensa */
-    --accent-ink: #1a1305;
+    --accent: #9fe870;        /* broto / valor / recompensa */
+    --accent-ink: #102008;
     --accent-2: #79b3a6;      /* validação / dado / TEE */
     --warn: #d18a63;          /* limitações assumidas */
     --shadow: 0 30px 80px -30px rgba(0,0,0,0.6);
@@ -37,16 +37,16 @@
       --bg: #f6f2e6; --bg-elev: #efe9d7; --surface: #fffcf3;
       --ink: #1c1c11; --ink-dim: #45452f; --muted: #6d6d51;
       --line: rgba(28,28,17,0.12); --line-strong: rgba(28,28,17,0.24);
-      --accent: #a06e13; --accent-ink: #fffaf0; --accent-2: #2f6d61; --warn: #a1502c;
-      --shadow: 0 30px 70px -35px rgba(28,24,10,0.25);
+      --accent: #397a1f; --accent-ink: #ffffff; --accent-2: #2f6d61; --warn: #a1502c;
+      --shadow: 0 30px 70px -35px rgba(20,40,22,0.22);
     }
   }
   :root[data-theme="light"]{
     --bg: #f6f2e6; --bg-elev: #efe9d7; --surface: #fffcf3;
     --ink: #1c1c11; --ink-dim: #45452f; --muted: #6d6d51;
     --line: rgba(28,28,17,0.12); --line-strong: rgba(28,28,17,0.24);
-    --accent: #a06e13; --accent-ink: #fffaf0; --accent-2: #2f6d61; --warn: #a1502c;
-    --shadow: 0 30px 70px -35px rgba(28,24,10,0.25);
+    --accent: #397a1f; --accent-ink: #ffffff; --accent-2: #2f6d61; --warn: #a1502c;
+    --shadow: 0 30px 70px -35px rgba(20,40,22,0.22);
   }
 
   *{ box-sizing:border-box; }
@@ -64,10 +64,10 @@
   :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
   .eyebrow{
-    font-family:"IBM Plex Mono", monospace; font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
-    color:var(--muted); display:flex; align-items:center; gap:9px; margin-bottom:16px;
+    font-family:"IBM Plex Mono", monospace; font-size:clamp(14px,1.1vw,17px); letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--muted); display:flex; align-items:center; gap:12px; margin-bottom:18px;
   }
-  .eyebrow::before{ content:""; width:16px; height:1px; background:var(--accent); display:inline-block; }
+  .eyebrow::before{ content:""; width:26px; height:2px; background:var(--accent); display:inline-block; }
 
   /* ---------- chrome: top progress + bar ---------- */
   .progress{ position:fixed; top:0; left:0; height:2px; background:linear-gradient(90deg,var(--accent-2),var(--accent)); z-index:50; transition:width .45s ease; }
@@ -87,15 +87,64 @@
   .slides{ height:100%; display:flex; width:100%; will-change:transform; transition:transform .55s cubic-bezier(.65,0,.35,1); }
   @media (prefers-reduced-motion: reduce){ .slides{ transition:none; } }
   .slide{
+    position:relative;
     flex:0 0 100%; height:100%; overflow-y:auto; overflow-x:hidden;
     display:flex; /* centralização via margin:auto — não corta o topo quando o conteúdo é mais alto que a área */
+    background:
+      radial-gradient(760px 520px at 94% 4%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 68%),
+      radial-gradient(700px 520px at 3% 96%, color-mix(in srgb, var(--accent-2) 13%, transparent), transparent 68%);
   }
-  .slide-inner{ max-width:1080px; margin:auto; padding:28px 32px; width:100%; }
-  @media (max-width:640px){ .slide-inner{ padding:20px; } }
+  .slide-logo{
+    position:absolute; top:12px; right:clamp(16px,2vw,30px); z-index:18;
+    display:block; width:clamp(72px,6.4vw,104px); height:auto;
+    filter:drop-shadow(0 3px 10px rgba(0,0,0,.18));
+    pointer-events:none;
+  }
+  .slide-hero > .slide-logo{ display:none !important; }
+  .presenter-marker{
+    position:absolute; top:8px; left:8px; z-index:20;
+    width:18px; height:18px; border:1px solid var(--line-strong); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:color-mix(in srgb,var(--surface) 82%,transparent);
+    color:var(--muted); font-family:"IBM Plex Mono",monospace; font-size:9px; font-weight:600; line-height:1;
+    pointer-events:none;
+  }
+  .slide-inner{
+    width:100%; min-height:100%; max-width:none; margin:0;
+    padding:clamp(28px,3.5vw,68px);
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  @media (max-width:640px){
+    .slide-inner{ padding:20px; }
+    .slide-logo{ top:8px; right:10px; width:54px; }
+  }
 
-  .section-head{ max-width:640px; margin-bottom:26px; }
-  .section-head h2{ font-size:clamp(24px,3.4vw,38px); }
+  .slide:not(.slide-hero):has(.section-head) .slide-inner{
+    justify-content:flex-start;
+    padding-top:clamp(38px,5vh,62px);
+  }
+  .section-head,
+  .team-header{
+    flex:0 0 auto; width:100%; max-width:900px; margin-inline:auto; text-align:center;
+  }
+  .section-head > .eyebrow,
+  .team-header > .eyebrow{ justify-content:center; }
+  .section-head h2{ margin-inline:auto; font-size:clamp(28px,3.4vw,52px); }
   .section-head p{ margin-top:12px; font-size:15px; color:var(--ink-dim); max-width:58ch; }
+  .slide-main{
+    flex:1 0 auto; width:100%; min-height:0;
+    padding-block:clamp(24px,4vh,48px);
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .slide:has(.thesis) .slide-main{ padding-bottom:clamp(10px,2vh,24px); }
+  .flow-slide .slide-main{ gap:clamp(16px,2.5vh,30px); }
+  @media (max-width:640px){
+    .slide:not(.slide-hero):has(.section-head) .slide-inner{ padding-top:24px; }
+    .slide-main{ flex-grow:0; min-height:auto; padding-block:28px; justify-content:flex-start; }
+  }
+  @media (max-height:700px) and (min-width:641px){
+    .slide-main{ padding-block:24px; }
+  }
 
   /* ---------- bottom controls ---------- */
   .bottombar{
@@ -121,6 +170,39 @@
   @media (max-width:700px){ .hint{ display:none; } }
   .fsbtn{ position:absolute; right:20px; width:32px; height:32px; font-size:13px; }
 
+  /* ---------- cue: nota de palco, só no hover ---------- */
+  .cue{
+    position:absolute; left:14px; bottom:14px; z-index:25;
+    max-width:min(560px, calc(100% - 28px));
+  }
+  .cue-dot{
+    width:11px; height:11px; border-radius:50%;
+    background:var(--accent); opacity:.38;
+    box-shadow:0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+    cursor:default;
+  }
+  .cue-card{
+    display:none; margin-bottom:10px;
+    padding:14px 16px 16px; border-radius:14px;
+    border:1px solid var(--line-strong);
+    background:color-mix(in srgb, var(--bg-elev) 92%, transparent);
+    backdrop-filter:blur(16px) saturate(140%); -webkit-backdrop-filter:blur(16px) saturate(140%);
+    box-shadow:var(--shadow);
+  }
+  .cue:hover .cue-card, .cue:focus-within .cue-card{ display:block; }
+  .cue:hover .cue-dot, .cue:focus-within .cue-dot{ opacity:.9; }
+  .cue-label{
+    font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:8px;
+  }
+  .cue-body{
+    font-size:14.5px; line-height:1.45; color:var(--ink); outline:none; min-height:3.2em;
+  }
+  .cue-body:focus{ outline:1px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset:4px; border-radius:6px; }
+  .cue-body:empty::before{
+    content:attr(data-placeholder); color:var(--muted);
+  }
+
   /* ---------- tela cheia (F11 ou botão): só os slides ---------- */
   html.is-fs .topbar, html.is-fs .bottombar, html.is-fs .hint{ display:none !important; }
   html.is-fs .deck-viewport{ inset:0; }
@@ -133,20 +215,58 @@
 
   /* -- capa -- */
   .slide-hero{ position:relative; }
+  .slide-hero .slide-inner{ max-width:none; }
   /* preso ao slide (inset:0), não ao conteúdo — assim não gera rolagem nem estica a capa */
   .hero-field{ position:absolute; inset:0; z-index:-1; pointer-events:none;
     background:
-      radial-gradient(620px 380px at 84% 6%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 65%),
-      radial-gradient(520px 380px at 2% 96%, color-mix(in srgb, var(--accent-2) 16%, transparent), transparent 65%);
+      radial-gradient(720px 460px at 84% 6%, color-mix(in srgb, var(--accent) 32%, transparent), transparent 65%),
+      radial-gradient(620px 460px at 2% 96%, color-mix(in srgb, var(--accent-2) 25%, transparent), transparent 65%);
+  }
+  .hero-layout{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:clamp(28px,5vw,72px); align-items:center; }
+  .hero-brand{ display:flex; flex-direction:column; align-items:flex-end; text-align:right; }
+  .hero-wordmark{
+    display:block; font-size:clamp(40px,6.4vw,84px); font-weight:650; letter-spacing:-0.05em;
+    line-height:1.2; padding:0.08em 0.04em 0.18em; overflow:visible;
+    background:linear-gradient(100deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-logo{
+    display:block; width:clamp(320px,38vw,700px); max-width:100%; height:auto; max-height:min(60vh,620px);
+    object-fit:contain; object-position:center right;
+  }
+  @media (max-width:760px){
+    .hero-layout{ grid-template-columns:1fr; gap:16px; }
+    .hero-brand{ order:-1; align-items:center; }
+    .hero-logo{ width:min(74vw,500px); max-height:36vh; object-position:center; }
   }
   .kicker-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:22px; }
   .pill{ font-family:"IBM Plex Mono",monospace; font-size:11px; padding:5px 10px; border-radius:100px; border:1px solid var(--line-strong); color:var(--muted); }
-  .slide-hero h1{ font-size:clamp(34px,6vw,68px); line-height:0.99; max-width:16ch; }
+  .slide-hero .kicker-row{ gap:10px; }
+  .slide-hero .kicker-row .pill{ font-size:13px; padding:7px 13px; }
+  .slide-hero h1{ font-size:clamp(32px,5.2vw,58px); line-height:1.05; max-width:18em; }
   .slide-hero h1 em{ font-style:normal; background:linear-gradient(100deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .slide-hero .lede{ margin-top:20px; font-size:clamp(15px,1.7vw,18.5px); color:var(--ink-dim); max-width:52ch; }
   .hero-meta{ margin-top:34px; display:flex; gap:34px; flex-wrap:wrap; padding-top:20px; border-top:1px solid var(--line); }
   .hero-meta .k{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:5px; display:block; }
   .hero-meta .v{ font-size:13.5px; color:var(--ink-dim); }
+
+  /* -- escala de apresentação em tela cheia -- */
+  html.is-fs .slide-inner{
+    width:100%; max-width:none;
+    padding:clamp(36px,4vw,76px);
+  }
+  html.is-fs .slide-hero .slide-inner{ max-width:none; }
+  html.is-fs .slide-hero h1{ font-size:clamp(52px,6vw,88px); }
+  html.is-fs .hero-wordmark{ font-size:clamp(64px,7.2vw,108px); }
+  @media (display-mode: fullscreen){
+    .slide-inner{
+      width:100%; max-width:none;
+      padding:clamp(36px,4vw,76px);
+    }
+    .slide-hero .slide-inner{ max-width:none; }
+    .slide-hero h1{ font-size:clamp(52px,6vw,88px); }
+    .hero-wordmark{ font-size:clamp(64px,7.2vw,108px); }
+  }
 
   /* -- tensão -- */
   .tension{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
@@ -156,16 +276,218 @@
   .tension p{ color:var(--ink-dim); font-size:14px; }
   .tension .tag{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); margin-bottom:12px; display:block; }
   .tension .tag.alt{ color:var(--accent-2); }
-  .thesis{ margin-top:22px; padding:20px 24px; border-left:2px solid var(--accent); font-size:15px; color:var(--ink); background:var(--surface); border-radius:0 12px 12px 0; }
+  .problem-tension > div{
+    position:relative; min-height:340px; padding:0; overflow:hidden;
+  }
+  .problem-image{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.58; }
+  .problem-tension > div::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg,rgba(11,12,8,.08) 5%,rgba(11,12,8,.94) 92%);
+  }
+  .problem-copy{ position:relative; z-index:1; min-height:340px; padding:clamp(38px,5vw,64px); display:flex; flex-direction:column; justify-content:flex-end; }
+  .problem-tension h3{ font-size:clamp(26px,3vw,38px); margin-bottom:18px; }
+  .problem-tension p{ font-size:clamp(15px,1.5vw,19px); color:#f4f1e4; }
+  .problem-tension .tag{
+    position:absolute; top:clamp(26px,3vw,40px); left:clamp(28px,4vw,52px);
+    font-size:11px; margin:0; padding:5px 9px;
+    border:1px solid currentColor; border-radius:100px;
+    background:rgba(11,12,8,.72); backdrop-filter:blur(8px);
+  }
+
+  /* -- solução: duas interfaces do produto -- */
+  .solution-slide .slide-main{ padding-top:clamp(18px,2.6vh,32px); }
+  .solution-cards{
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(16px,2vw,28px);
+  }
+  .solution-card{
+    min-width:0; padding:clamp(16px,1.7vw,24px);
+    border:1px solid var(--line-strong); border-radius:18px; background:var(--surface);
+    box-shadow:0 24px 60px -46px rgba(0,0,0,.85);
+  }
+  .solution-card-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:16px;
+    margin-bottom:14px;
+  }
+  .solution-card-head .tag{
+    display:block; margin-bottom:7px;
+    font-family:"IBM Plex Mono",monospace; font-size:clamp(12px,1vw,15px); line-height:1.25;
+    letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent);
+  }
+  .solution-card-business .solution-card-head .tag{ color:var(--accent-2); }
+  .solution-card-head h3{ font-size:clamp(26px,2.3vw,36px); line-height:1.05; }
+  .solution-card-head .access{
+    flex:none; font-family:"IBM Plex Mono",monospace; font-size:10px; color:var(--muted);
+  }
+  .solution-screen{
+    overflow:hidden; min-height:clamp(260px,35vh,360px);
+    border:1px solid var(--line-strong); border-radius:13px;
+    background:color-mix(in srgb,var(--bg-elev) 88%,var(--surface));
+  }
+  .solution-screen-bar{
+    min-height:38px; padding:8px 11px;
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    border-bottom:1px solid var(--line);
+    font-family:"IBM Plex Mono",monospace; font-size:9.5px; color:var(--muted);
+  }
+  .solution-screen-brand{ display:flex; align-items:center; gap:7px; color:var(--ink); font-weight:600; }
+  .solution-screen-brand::before{
+    content:""; width:8px; height:8px; border-radius:3px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  }
+  .solution-screen-chip{
+    padding:4px 7px; border:1px solid var(--line); border-radius:6px; color:var(--ink-dim);
+    white-space:nowrap;
+  }
+  .solution-screen-body{ padding:clamp(11px,1.3vw,17px); }
+  .solution-kpis{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; }
+  .solution-kpi{
+    min-width:0; padding:10px; border:1px solid var(--line); border-radius:9px;
+    background:color-mix(in srgb,var(--surface) 82%,transparent);
+  }
+  .solution-kpi span{
+    display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    font-family:"IBM Plex Mono",monospace; font-size:8.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--muted);
+  }
+  .solution-kpi strong{
+    display:block; margin-top:5px; font-family:"IBM Plex Mono",monospace;
+    font-size:clamp(13px,1.25vw,18px); line-height:1.1; color:var(--ink);
+  }
+  .solution-kpi strong.good{ color:var(--accent-2); }
+  .solution-kpi strong.reward{ color:var(--accent); }
+  .solution-panels{ display:grid; grid-template-columns:1.35fr .9fr; gap:8px; margin-top:8px; }
+  .solution-panel{
+    min-width:0; padding:11px; border:1px solid var(--line); border-radius:9px;
+    background:color-mix(in srgb,var(--surface) 70%,transparent);
+  }
+  .solution-panel-title{
+    display:flex; justify-content:space-between; gap:8px; margin-bottom:10px;
+    font-family:"IBM Plex Mono",monospace; font-size:8.5px; color:var(--muted);
+  }
+  .solution-chart{
+    height:76px; display:flex; align-items:flex-end; justify-content:space-around; gap:7px;
+    border-bottom:1px solid var(--line);
+  }
+  .solution-chart i{
+    position:relative; flex:1; max-width:24px; min-height:8px; border-radius:3px 3px 0 0;
+    background:color-mix(in srgb,var(--accent-2) 65%,var(--bg-elev));
+  }
+  .solution-chart i.mine{ background:var(--accent); }
+  .solution-chart i.mine::before{
+    content:"você"; position:absolute; left:50%; top:-14px; transform:translateX(-50%);
+    font-family:"IBM Plex Mono",monospace; font-size:7px; color:var(--accent); white-space:nowrap;
+  }
+  .solution-screen-note{ margin-top:7px; font-size:9px; color:var(--muted); }
+  .solution-wallet-balance{
+    margin:4px 0 9px; font-family:"IBM Plex Mono",monospace; font-size:clamp(18px,1.8vw,27px);
+    font-weight:600; color:var(--accent);
+  }
+  .solution-wallet-row{
+    display:flex; justify-content:space-between; gap:8px; padding:7px 0;
+    border-top:1px dashed var(--line); font-size:9px; color:var(--muted);
+  }
+  .solution-wallet-row b{ color:var(--accent-2); font-weight:600; }
+  .solution-filters{ display:flex; flex-wrap:wrap; gap:6px; }
+  .solution-filters .solution-screen-chip:first-child{ color:var(--accent-2); border-color:color-mix(in srgb,var(--accent-2) 42%,var(--line)); }
+  .solution-export{ color:var(--accent) !important; }
+  .solution-risk-grid{ display:grid; grid-template-columns:1fr 1.35fr; gap:8px; margin-top:8px; }
+  .solution-risk{
+    min-height:0; display:flex; flex-direction:column; justify-content:center;
+  }
+  .solution-risk-score{
+    font-family:"IBM Plex Mono",monospace; font-size:clamp(25px,2.8vw,40px);
+    color:var(--accent-2); line-height:1;
+  }
+  .solution-risk-scale{
+    height:5px; margin:10px 0 7px; overflow:hidden; border-radius:5px;
+    background:linear-gradient(90deg,var(--accent-2) 0 64%,var(--line) 64%);
+  }
+  .solution-api{
+    margin-top:8px; padding:8px 10px; display:flex; justify-content:space-between; gap:10px;
+    border:1px dashed var(--line); border-radius:8px;
+    font-family:"IBM Plex Mono",monospace; font-size:8.5px; color:var(--muted);
+  }
+  .solution-api b{ color:var(--accent-2); font-weight:500; }
+  @media (max-width:760px){
+    .solution-cards{ grid-template-columns:1fr; }
+    .solution-screen{ min-height:0; }
+  }
+  @media (max-width:430px){
+    .solution-card-head .access{ display:none; }
+    .solution-panels,.solution-risk-grid{ grid-template-columns:1fr; }
+  }
+  .slide:has(.thesis) .slide-inner{ padding-bottom:clamp(100px,11vh,130px); }
+  .thesis{
+    position:absolute; left:0; right:0; bottom:0; z-index:8;
+    min-height:72px; margin:0; padding:18px clamp(32px,4vw,76px);
+    display:flex; align-items:center; justify-content:center;
+    border-top:2px solid var(--accent);
+    font-size:clamp(15px,1.25vw,19px); text-align:center; color:var(--ink);
+    background:color-mix(in srgb,var(--surface) 92%,transparent);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  }
 
   /* -- mercado -- */
   .stat-row{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
   @media (max-width:700px){ .stat-row{ grid-template-columns:1fr; } }
   .stat{ background:var(--surface); padding:22px 22px; }
+  .card-thumb{
+    display:block; width:100%; height:clamp(52px,7vh,78px);
+    margin:0 0 12px; border-radius:10px; object-fit:cover;
+    opacity:.82; filter:saturate(.78) contrast(1.06);
+  }
   .stat .label{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
   .stat .num{ font-family:"IBM Plex Mono",monospace; font-size:clamp(18px,2.4vw,26px); font-weight:600; line-height:1.2; }
   .stat .num small{ font-size:0.5em; color:var(--muted); font-weight:500; margin-left:4px; }
   .stat p{ margin-top:9px; font-size:13px; color:var(--ink-dim); }
+  .value-buyers-slide .slide-main{ flex:1 1 0; }
+  .value-buyers-slide .stat-row{
+    flex:1; min-height:clamp(300px,42vh,440px);
+  }
+  .value-buyers-slide .stat{
+    display:flex; flex-direction:column;
+    padding:0 0 clamp(24px,3vh,34px);
+  }
+  .value-buyers-slide .stat .card-thumb{
+    flex:0 0 45%;
+    width:100%; height:45%; min-height:0;
+    margin:0 0 clamp(14px,2vh,20px);
+    border-radius:0;
+  }
+  .value-buyers-slide .stat .label{
+    flex:0 0 auto; min-height:1.3em;
+    margin:0 clamp(20px,2vw,28px) clamp(12px,1.5vh,16px);
+    color:var(--accent);
+    font-size:clamp(14px,1.2vw,17px);
+    font-weight:650; line-height:1.25;
+    letter-spacing:.075em;
+  }
+  .value-buyers-slide .stat .num{
+    flex:1; min-height:2.4em;
+    display:flex; align-items:center;
+    margin-inline:clamp(20px,2vw,28px);
+  }
+  .value-buyers-slide .stat p{
+    flex:0 0 auto; min-height:2.8em;
+    margin:10px clamp(20px,2vw,28px) 0;
+  }
+  @media (max-width:700px){
+    .value-buyers-slide .slide-main{ flex:0 0 auto; }
+    .value-buyers-slide .stat-row{ min-height:0; }
+    .value-buyers-slide .stat{
+      min-height:0;
+    }
+    .value-buyers-slide .stat .card-thumb{
+      flex-basis:clamp(140px,42vw,220px);
+      height:clamp(140px,42vw,220px);
+    }
+    .value-buyers-slide .stat .label,
+    .value-buyers-slide .stat .num,
+    .value-buyers-slide .stat p{
+      min-height:0;
+    }
+  }
 
   /* -- quote -- */
   .quote{ font-size:clamp(22px,3.6vw,38px); font-weight:560; line-height:1.16; letter-spacing:-0.01em; max-width:22ch; text-wrap:balance; }
@@ -223,6 +545,27 @@
   .demo-flow{ margin-top:22px; display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--muted); }
   .demo-flow .pill{ color:var(--ink-dim); }
 
+  /* -- produto: evidência do custo de decidir sem referência -- */
+  .product-evidence .section-head{ max-width:1100px; }
+  .product-evidence .section-head h2{ font-size:clamp(34px,4.4vw,66px); max-width:17ch; line-height:1.02; }
+  .evidence-grid{
+    display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:18px; overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .evidence-card{ min-height:210px; padding:clamp(22px,2.4vw,34px); background:var(--surface); display:flex; flex-direction:column; }
+  .evidence-place{ font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .evidence-number{ margin-top:16px; font-family:"IBM Plex Mono",monospace; font-size:clamp(34px,4.1vw,58px); font-weight:600; line-height:1; color:var(--accent); }
+  .evidence-delta{ margin-top:10px; font-size:clamp(15px,1.35vw,19px); color:var(--ink); }
+  .evidence-cost{ margin-top:auto; padding-top:24px; font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink-dim); }
+  .evidence-source{ margin:16px 2px 0; font-size:11.5px; line-height:1.45; color:var(--muted); }
+  .evidence-source a{ text-decoration-color:var(--line-strong); text-underline-offset:3px; }
+  .evidence-source a:hover{ color:var(--ink); }
+  @media (max-width:760px){
+    .evidence-grid{ grid-template-columns:1fr; }
+    .evidence-card{ min-height:0; }
+  }
+
   /* -- roadmap -- */
   .roadmap{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px 18px; }
   @media (max-width:800px){ .roadmap{ grid-template-columns:1fr; } }
@@ -259,14 +602,35 @@
   .limit h4{ font-size:15px; margin-bottom:8px; }
   .limit p{ font-size:13px; color:var(--ink-dim); }
 
-  /* -- equipe -- */
-  .team{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
-  @media (max-width:900px){ .team{ grid-template-columns:1fr; } }
-  .person{ border:1px solid var(--line); border-radius:16px; padding:22px 20px; background:var(--surface); display:flex; flex-direction:column; gap:8px; }
-  .person .role{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); }
-  .person h3{ font-size:17px; }
-  .person p{ font-size:13px; color:var(--ink-dim); margin:0; }
-  .person .stack{ display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+  /* -- equipe (slide 10) -- */
+  .team-slide .slide-inner{ height:100%; }
+  .team-slide .team-header{ margin-bottom:clamp(18px,2.5vh,28px); }
+  .team-slide .team-eyebrow{ margin-bottom:12px; }
+  .team-slide .team-title{
+    margin:0;
+    font-size:clamp(32px,3.6vw,54px); line-height:1.08; text-wrap:balance;
+  }
+  .team-slide .team{
+    flex:1 1 auto; min-height:0; width:100%;
+    display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:center; gap:clamp(20px,2.5vw,36px);
+  }
+  .team-slide .person{
+    min-width:0; min-height:0;
+    display:flex; flex-direction:column;
+    border:1px solid var(--line); border-radius:18px; background:var(--surface); overflow:hidden;
+  }
+  .team-slide .person-photo{
+    display:block; width:100%; height:clamp(280px,42vh,500px); min-height:0; flex:none;
+    object-fit:contain; object-position:center; background:color-mix(in srgb, var(--surface) 82%, black);
+  }
+  .team-slide .person-info{ flex:0 0 auto; padding:18px 20px 20px; text-align:center; }
+  .team-slide .person .role{ display:block; margin-top:6px; font-family:"IBM Plex Mono",monospace; font-size:clamp(12px,1vw,14px); letter-spacing:0.1em; text-transform:uppercase; color:var(--accent); }
+  .team-slide .person h3{ font-size:clamp(24px,2vw,30px); }
+  @media (max-width:700px){
+    .team-slide .slide-inner{ height:auto; }
+    .team-slide .team{ flex:none; grid-template-columns:1fr; align-items:stretch; }
+    .team-slide .person-photo{ height:clamp(240px,70vw,390px); min-height:0; flex:none; }
+  }
 
   /* -- closing -- */
   .closing h2{ font-size:clamp(30px,5vw,54px); max-width:20ch; }
@@ -281,8 +645,101 @@
   .flow-item .n{ font-family:"IBM Plex Mono",monospace; font-size:11px; color:var(--accent); }
   .flow-item h4{ font-size:14.5px; font-weight:600; margin:8px 0 6px; }
   .flow-item p{ font-size:12.5px; color:var(--muted); margin:0; }
+  .flow-distributed{
+    width:100%; max-width:1400px; margin:0 auto;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:38px 56px;
+  }
+  .flow-distributed .flow-item{
+    position:relative; min-height:175px; padding:26px 28px;
+    border-color:var(--line-strong);
+    display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+    box-shadow:0 18px 45px -38px color-mix(in srgb,var(--accent) 70%,transparent);
+  }
+  .flow-distributed .flow-item:nth-child(1){ grid-column:1; grid-row:1; }
+  .flow-distributed .flow-item:nth-child(2){ grid-column:2; grid-row:1; }
+  .flow-distributed .flow-item:nth-child(3){ grid-column:3; grid-row:1; }
+  .flow-distributed .flow-item:nth-child(4){ grid-column:3; grid-row:2; }
+  .flow-distributed .flow-item:nth-child(5){ grid-column:2; grid-row:2; }
+  .flow-distributed .flow-item .n{ font-size:12.5px; letter-spacing:.06em; }
+  .flow-distributed .card-thumb{ margin:10px 0 4px; }
+  .flow-distributed .flow-item h4{ font-size:clamp(20px,1.7vw,27px); margin:12px 0 10px; }
+  .flow-distributed .flow-item p{ font-size:clamp(14px,1.05vw,17px); color:var(--ink-dim); }
+  .flow-distributed .flow-item::after{
+    position:absolute; z-index:2; color:var(--accent);
+    font-family:"IBM Plex Mono",monospace; font-size:30px; line-height:1;
+  }
+  .flow-distributed .flow-item:nth-child(1)::after,
+  .flow-distributed .flow-item:nth-child(2)::after{
+    content:"→"; right:-43px; top:50%; transform:translateY(-50%);
+  }
+  .flow-distributed .flow-item:nth-child(3)::after{
+    content:"↓"; left:50%; bottom:-35px; transform:translateX(-50%);
+  }
+  .flow-distributed .flow-item:nth-child(4)::after{
+    content:"←"; left:-43px; top:50%; transform:translateY(-50%);
+  }
+  @media (max-width:900px){
+    .flow-distributed{ grid-template-columns:1fr; gap:38px; max-width:680px; }
+    .flow-distributed .flow-item:nth-child(n){ grid-column:1; grid-row:auto; }
+    .flow-distributed .flow-item:not(:last-child)::after{
+      content:"↓"; left:50%; right:auto; top:auto; bottom:-35px; transform:translateX(-50%);
+    }
+    .flow-distributed .flow-item:last-child::after{ content:none; }
+  }
+  .flow-slide .flow-distributed{ margin:0 auto; }
   .honesty{ margin-top:14px; padding:13px 16px; border:1px dashed color-mix(in srgb, var(--warn) 50%, var(--line)); border-radius:12px; font-size:13px; color:var(--ink-dim); background:var(--surface); }
   .honesty strong{ color:var(--ink); font-weight:600; }
+
+  /* -- arquitetura: cards conectados -- */
+  .architecture-slide .section-head{ max-width:1180px; }
+  .architecture-slide .section-head h2{ max-width:22ch; }
+  .architecture-slide .slide-main{ padding-top:clamp(18px,2.5vh,30px); }
+  .architecture-flow{
+    display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:clamp(24px,2.2vw,40px);
+    width:100%; align-items:stretch;
+  }
+  .architecture-card{
+    position:relative; min-height:clamp(270px,39vh,390px);
+    padding:clamp(22px,2vw,32px) clamp(18px,1.6vw,26px);
+    border:1px solid var(--line-strong); border-radius:18px; background:var(--surface);
+    display:flex; flex-direction:column; box-shadow:0 22px 54px -44px rgba(0,0,0,.8);
+  }
+  .architecture-card:not(:last-child)::after{
+    content:"→"; position:absolute; z-index:3; right:calc(clamp(24px,2.2vw,40px) * -.78);
+    top:50%; transform:translateY(-50%); color:var(--accent);
+    font-family:"IBM Plex Mono",monospace; font-size:clamp(22px,2vw,31px); line-height:1;
+  }
+  .architecture-card::before{
+    content:""; position:absolute; left:18px; right:18px; top:-1px; height:3px;
+    border-radius:0 0 4px 4px; background:var(--accent-2);
+  }
+  .architecture-card.chain::before{ background:var(--accent); }
+  .architecture-card .card-step{
+    font-family:"IBM Plex Mono",monospace; font-size:clamp(30px,3vw,48px); line-height:1;
+    color:color-mix(in srgb,var(--ink) 15%,transparent);
+  }
+  .architecture-card .card-state{
+    margin-top:auto; padding-top:18px;
+    font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent-2);
+  }
+  .architecture-card.chain .card-state{ color:var(--accent); }
+  .architecture-card h3{
+    flex:1; margin-top:clamp(22px,3vh,40px);
+    font-size:clamp(24px,2.25vw,36px); line-height:1.02; letter-spacing:-.035em;
+    display:flex; align-items:center;
+  }
+  @media (max-width:1050px){
+    .architecture-flow{ grid-template-columns:1fr; gap:28px; }
+    .architecture-card{ min-height:0; padding:22px 24px 22px 88px; }
+    .architecture-card .card-step{ position:absolute; left:24px; top:24px; font-size:34px; }
+    .architecture-card h3{ margin-top:0; }
+    .architecture-card .card-state{ margin-top:14px; }
+    .architecture-card:not(:last-child)::after{
+      content:"↓"; right:auto; left:50%; top:auto; bottom:-26px; transform:translateX(-50%); font-size:24px;
+    }
+  }
 
   /* -- mercado: Plano Safra como contexto, não TAM -- */
   .context-bar{ margin-bottom:16px; padding:16px 20px; border-radius:14px; border:1px solid var(--line); background:var(--surface); display:flex; gap:16px; align-items:baseline; flex-wrap:wrap; }
@@ -293,11 +750,62 @@
   .vs-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
   @media (max-width:900px){ .vs-grid{ grid-template-columns:repeat(2,1fr); } }
   .vs-card{ border:1px solid var(--line); border-radius:16px; padding:20px 18px; background:var(--surface); display:flex; flex-direction:column; gap:8px; }
+  .vs-card .card-thumb{ margin-bottom:4px; }
   .vs-card.us{ border-color:var(--line-strong); box-shadow:var(--shadow); }
   .vs-card .who{ font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); }
   .vs-card.us .who{ color:var(--accent); }
   .vs-card h3{ font-size:16px; }
   .vs-card p{ font-size:13px; color:var(--ink-dim); margin:0; }
+  .competition-slide .vs-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:clamp(16px,1.8vw,28px);
+  }
+  .competition-slide .vs-card{
+    min-height:clamp(300px,42vh,430px);
+    padding:clamp(24px,2.4vw,38px);
+    gap:clamp(10px,1.4vh,18px);
+    justify-content:center;
+  }
+  .competition-slide .vs-card.us{
+    position:relative; isolation:isolate; overflow:hidden;
+    border:2px solid color-mix(in srgb,var(--accent) 72%,var(--accent-2));
+    background:
+      radial-gradient(circle at 88% 8%,color-mix(in srgb,var(--accent) 19%,transparent),transparent 38%),
+      linear-gradient(145deg,color-mix(in srgb,var(--accent-2) 12%,var(--surface)),color-mix(in srgb,var(--accent) 10%,var(--surface)));
+    box-shadow:
+      0 26px 64px -34px color-mix(in srgb,var(--accent) 88%,transparent),
+      0 16px 42px -30px color-mix(in srgb,var(--accent-2) 78%,transparent),
+      inset 0 0 0 1px color-mix(in srgb,var(--ink) 9%,transparent);
+  }
+  .competition-slide .vs-card.us::before{
+    content:""; position:absolute; z-index:-1; inset:0 0 auto; height:6px;
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  }
+  .competition-slide .vs-card.us > *{ position:relative; z-index:1; }
+  .competition-slide .vs-card .card-thumb{
+    height:clamp(120px,19vh,190px);
+    margin-bottom:clamp(6px,1vh,12px);
+  }
+  .competition-slide .vs-card .who{ font-size:clamp(11px,.9vw,14px); }
+  .competition-slide .vs-card.us .who{
+    width:max-content; max-width:100%;
+    font-size:clamp(16px,1.45vw,22px); font-weight:700; letter-spacing:.08em;
+    color:var(--accent);
+    background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .competition-slide .vs-card h3{ font-size:clamp(24px,2.2vw,34px); }
+  .competition-slide .vs-card.us h3{
+    font-size:clamp(27px,2.55vw,39px);
+    color:var(--ink); text-shadow:0 1px 0 color-mix(in srgb,var(--accent) 18%,transparent);
+  }
+  .competition-slide .vs-card p{ font-size:clamp(14px,1.15vw,18px); }
+  @media (max-width:760px){
+    .competition-slide .vs-grid{ grid-template-columns:1fr; }
+    .competition-slide .vs-card{ min-height:0; }
+    .competition-slide .vs-card .card-thumb{ height:clamp(110px,24vh,170px); }
+  }
 
   /* -- CTA: três pedidos concretos -- */
   .asks{ margin-top:28px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
@@ -313,15 +821,20 @@
       --bg:#ffffff; --bg-elev:#f3efe3; --surface:#fbf9f2;
       --ink:#1c1c11; --ink-dim:#45452f; --muted:#6d6d51;
       --line:rgba(28,28,17,0.14); --line-strong:rgba(28,28,17,0.28);
-      --accent:#a06e13; --accent-ink:#fffaf0; --accent-2:#2f6d61; --warn:#a1502c; --shadow:none;
+      --accent:#397a1f; --accent-ink:#ffffff; --accent-2:#2f6d61; --warn:#a1502c; --shadow:none;
     }
     html,body{ height:auto; overflow:visible; }
-    .progress,.topbar,.bottombar,.hint,.hero-field{ display:none !important; }
+    .progress,.topbar,.bottombar,.hint,.hero-field,.cue,.presenter-marker{ display:none !important; }
     .deck-viewport{ position:static; inset:auto; overflow:visible; }
     .slides{ display:block; transform:none !important; transition:none; }
     .slide{ display:block; height:auto; overflow:visible; break-after:page; page-break-after:always; padding:24px 0; }
     .slide:last-child{ break-after:auto; page-break-after:auto; }
-    .slide-inner{ margin:0 auto; }
+    .slide-inner{ min-height:0; display:block; margin:0 auto; }
+    .slide-main{ display:block; min-height:0; padding-block:28px 0; }
+    .slide:has(.thesis) .slide-inner{ padding-bottom:28px; }
+    .thesis{ position:static; min-height:0; margin-top:22px; }
+    .value-buyers-slide .stat-row,
+    .value-buyers-slide .stat{ min-height:0; }
   }
 </style>
 </head>
@@ -338,260 +851,432 @@
 
     <!-- 1 · CAPA -->
     <section class="slide slide-hero">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Felipe" title="Felipe">F</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="1" data-placeholder="O que falar neste slide…">A limitação atual da IA não é mais hardware, são dados. Informação de qualidade também é o que faz uma empresa evoluir e tomar melhores decisões. Pensando nisso, criamos a AgroBench, um sistema para fornecer uma fonte de dados de alta precisão e muito valor potencial, com dados que ninguém conta.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
       <div class="hero-field" aria-hidden="true"></div>
       <div class="slide-inner">
-        <div class="kicker-row">
-          <span class="pill">Solana Devnet</span><span class="pill">USDC</span><span class="pill">Passo Fundo · RS</span>
-        </div>
-        <h1>Quanto o vizinho <em>realmente</em> pagou pelo adubo.</h1>
-        <p class="lede">O produtor contribui o custo da safra, vê de graça como se compara à microrregião e recebe USDC. Quem paga o agregado é banco, seguro e cooperativa.</p>
-        <div class="hero-meta">
-          <div><span class="k">Gancho</span><span class="v mono">Custo de insumo por região</span></div>
-          <div><span class="k">Recorte</span><span class="v mono">Passo Fundo e microrregião</span></div>
-          <div><span class="k">Estágio</span><span class="v mono">MVP — Solana Devnet</span></div>
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <div class="kicker-row">
+              <span class="pill">Solana Devnet</span><span class="pill">Recebe em Solana</span><span class="pill">Passo Fundo · RS</span>
+            </div>
+            <h1>O agro já tem número <em>público</em>.<br>Falta o que ninguém conta.</h1>
+          </div>
+          <div class="hero-brand">
+            <img class="hero-logo" src="./logo.png" alt="AgroBench">
+          </div>
         </div>
       </div>
     </section>
 
     <!-- 2 · PROBLEMA -->
     <section class="slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Pablo" title="Pablo">P</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="2" data-placeholder="O que falar neste slide…">O produtor planta, compra insumo, aplica defensivo e entrega a safra sem saber se o custo por hectare e a produtividade estão na média da microrregião. Do outro lado, banco, seguro e cooperativa precificam crédito e risco com safra passada, autodeclaração e número público. O lab de IA treina no mesmo vazio — CONAB e satélite não são o custo real desta lavoura. É o mesmo dado que falta nos dois lados. Ninguém troca o número individual. Ninguém paga hoje por um agregado privado da safra. Esse é o buraco que a AgroBench preenche.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
       <div class="slide-inner">
         <div class="section-head">
           <div class="eyebrow">O problema</div>
-          <h2>O mesmo número falta nas duas pontas.</h2>
+          <h2>O mesmo dado falta nas duas pontas.</h2>
         </div>
-        <div class="tension">
-          <div>
-            <span class="tag">Produtor</span>
-            <h3>Negocia adubo às cegas</h3>
-            <p>Não existe um “quanto o vizinho está pagando” acessível. Cada um compra insumo isolado — sem saber se o preço é justo na sua região.</p>
-          </div>
-          <div>
-            <span class="tag alt">Banco · seguro · cooperativa</span>
-            <h3>Precifica risco com estimativa</h3>
-            <p>Crédito e seguro agrícola saem de safras passadas, autodeclaração e números públicos. Falta custo e produtividade da safra, na microrregião.</p>
+        <div class="slide-main">
+          <div class="tension problem-tension">
+            <div>
+              <img class="problem-image" src="./slide2-produtor.jpg" alt="">
+              <div class="problem-copy">
+                <span class="tag">Produtor</span>
+                <h3>Sem referência regional</h3>
+                <p class="mono">Custo/ha · insumos · produtividade</p>
+              </div>
+            </div>
+            <div>
+              <img class="problem-image" src="./slide2-empresas.jpg" alt="">
+              <div class="problem-copy">
+                <span class="tag alt">Banco · seguro · cooperativa · IA</span>
+                <h3>Decidem com estimativas</h3>
+                <p class="mono">Risco · crédito · planejamento · modelos</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="thesis">Duas pontas. O mesmo dado. Ninguém troca o número individual — e ninguém paga por um agregado privado da safra.</div>
       </div>
     </section>
 
-    <!-- 3 · SOLUÇÃO -->
-    <section class="slide">
+    <!-- 3 · PRODUTO -->
+    <section class="slide product-evidence">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Felipe" title="Felipe">F</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="4" data-placeholder="O que falar neste slide…">Isto não é resultado da AgroBench nem uma projeção para Passo Fundo. É uma simulação do Projeto Campo Futuro, da CNA/Senar com o Cepea/USP, para fazendas típicas de três regiões. Ao comparar compras antecipadas, de janeiro a abril de 2025, com compras tardias, de maio a julho, o custo da adubação para a soja 2025/26 subiu entre 6,11% e 18,27%. Os produtos e os tamanhos das fazendas são diferentes, por isso o dado comparável é o acréscimo por hectare; os totais mostram a escala do impacto em cada módulo típico. A tese é simples: referência atual, regional e detalhada muda o momento da compra — e uma decisão muda centenas ou milhares de sacas.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
+      <div class="slide-inner">
+        <div class="section-head">
+          <div class="eyebrow">O preço de decidir sem referência</div>
+          <h2>Adiar a compra custou até <span style="color:var(--accent)">1.963 sacas.</span></h2>
+        </div>
+        <div class="slide-main">
+          <div class="evidence-grid">
+            <article class="evidence-card">
+              <span class="evidence-place">Carazinho · RS</span>
+              <strong class="evidence-number">+R$ 52,50<small>/ha</small></strong>
+              <span class="evidence-delta">+6,11% na adubação</span>
+              <span class="evidence-cost">125 sc · fazenda típica de 285 ha</span>
+            </article>
+            <article class="evidence-card">
+              <span class="evidence-place">Rio Verde · GO</span>
+              <strong class="evidence-number">+R$ 98,80<small>/ha</small></strong>
+              <span class="evidence-delta">+7,78% na adubação</span>
+              <span class="evidence-cost">1.309 sc · fazenda típica de 1.500 ha</span>
+            </article>
+            <article class="evidence-card">
+              <span class="evidence-place">Maracaju · MS</span>
+              <strong class="evidence-number">+R$ 216,80<small>/ha</small></strong>
+              <span class="evidence-delta">+18,27% na adubação</span>
+              <span class="evidence-cost">1.963 sc · fazenda típica de 1.000 ha</span>
+            </article>
+          </div>
+          <p class="evidence-source">Compra antecipada (jan–abr) × tardia (mai–jul) de fertilizantes para soja 2025/26; simulação em valores de jul/2025 (IGP-DI). Fonte: <a href="https://cnabrasil.org.br/publicacoes/margens-apertadas-adiam-compras-e-elevam-custo-dos-fertilizantes-na-safra-25-26" target="_blank" rel="noopener">Projeto Campo Futuro · CNA/Senar/Esalq-Cepea</a>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · SOLUÇÃO -->
+    <section class="slide solution-slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Felipe" title="Felipe">F</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="3" data-placeholder="O que falar neste slide…">A AgroBench resolve essa falta de dado assim: o produtor contribui sem se expor. Manda custo e produtividade da safra cifrados, além de detalhes do solo, clima e pragas — métrica detalhada, específica, sem jogar CPF, nome ou e-mail no que vira mercado. Quanto mais preciso o número, mais o agregado vale. Pra ele continuar mandando, cada ciclo aceito cai uma recompensa em Solana, numa carteira simplificada: abre o app e pronto. Não precisa entender chain, seed phrase nem gas. O painel da região só libera depois de três ciclos seguidos. Quem paga essa conta é banco, seguro, cooperativa e o lab de IA. O produtor entra de graça.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
       <div class="slide-inner">
         <div class="section-head">
           <div class="eyebrow">A solução</div>
-          <h2>Contribui cifrado. Compara de graça. Recebe USDC.</h2>
+          <h2>Contribui cifrado. Compara de graça. Recebe em Solana.</h2>
         </div>
-        <div class="tension">
-          <div>
-            <span class="tag">Produtor — de graça</span>
-            <h3>Entra com uma conta. Sai com um número.</h3>
-            <p>Registra o custo da safra cifrado. Vê a média da microrregião. Recebe USDC por ter alimentado o agregado — sem seed phrase e sem pagar gas.</p>
-          </div>
-          <div>
-            <span class="tag alt">Instituição — quem paga</span>
-            <h3>Compra o agregado, não o nome de ninguém.</h3>
-            <p>Banco, seguradora e cooperativa assinam o painel para precificar crédito e seguro com custo e produtividade da safra — não com estimativa histórica.</p>
+        <div class="slide-main">
+          <div class="solution-cards">
+            <article class="solution-card solution-card-producer">
+              <header class="solution-card-head">
+                <div>
+                  <span class="tag">Produtor — de graça</span>
+                  <h3>Minha safra</h3>
+                </div>
+                <span class="access">APP DO PRODUTOR</span>
+              </header>
+              <div class="solution-screen" aria-label="Interface AgroBench para envio e acompanhamento da safra">
+                <div class="solution-screen-bar">
+                  <span class="solution-screen-brand">AgroBench</span>
+                  <span class="solution-screen-chip">Safra 25/26</span>
+                </div>
+                <div class="solution-screen-body">
+                  <div class="solution-kpis">
+                    <div class="solution-kpi"><span>Cultura</span><strong>Soja</strong></div>
+                    <div class="solution-kpi"><span>Custo / ha</span><strong>R$ 4.280</strong></div>
+                    <div class="solution-kpi"><span>Envio</span><strong class="good">Validado</strong></div>
+                  </div>
+                  <div class="solution-panels">
+                    <section class="solution-panel">
+                      <div class="solution-panel-title"><span>CUSTO REGIONAL / HA</span><span>PASSO FUNDO</span></div>
+                      <div class="solution-chart" aria-label="Comparação do custo por hectare com a região">
+                        <i style="height:46%"></i><i style="height:68%"></i><i class="mine" style="height:55%"></i><i style="height:78%"></i><i style="height:63%"></i>
+                      </div>
+                      <div class="solution-screen-note">8% abaixo da média regional</div>
+                    </section>
+                    <section class="solution-panel">
+                      <div class="solution-panel-title"><span>CARTEIRA</span><span>SOL</span></div>
+                      <div class="solution-wallet-balance">0,42</div>
+                      <div class="solution-wallet-row"><span>Safra validada</span><b>+0,12</b></div>
+                      <div class="solution-wallet-row"><span>Próximo ciclo</span><span>aberto</span></div>
+                    </section>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article class="solution-card solution-card-business">
+              <header class="solution-card-head">
+                <div>
+                  <span class="tag">Empresas e pesquisa — quem paga</span>
+                  <h3>Inteligência regional</h3>
+                </div>
+                <span class="access">PAINEL + API</span>
+              </header>
+              <div class="solution-screen" aria-label="Dashboard AgroBench de dados agrícolas agregados">
+                <div class="solution-screen-bar">
+                  <span class="solution-screen-brand">AgroBench Insights</span>
+                  <div class="solution-filters">
+                    <span class="solution-screen-chip">Soja</span>
+                    <span class="solution-screen-chip">Norte · RS</span>
+                    <span class="solution-screen-chip solution-export">Exportar ↗</span>
+                  </div>
+                </div>
+                <div class="solution-screen-body">
+                  <div class="solution-kpis">
+                    <div class="solution-kpi"><span>Amostras</span><strong>1.248</strong></div>
+                    <div class="solution-kpi"><span>Custo mediano</span><strong>R$ 4,3 mil</strong></div>
+                    <div class="solution-kpi"><span>Atualização</span><strong class="good">Hoje</strong></div>
+                  </div>
+                  <div class="solution-risk-grid">
+                    <section class="solution-panel solution-risk">
+                      <div class="solution-panel-title"><span>RISCO REGIONAL</span><span>BAIXO</span></div>
+                      <strong class="solution-risk-score">24</strong>
+                      <div class="solution-risk-scale"></div>
+                      <div class="solution-screen-note">−6 pts no ciclo</div>
+                    </section>
+                    <section class="solution-panel">
+                      <div class="solution-panel-title"><span>CUSTO POR MICRORREGIÃO</span><span>R$ / HA</span></div>
+                      <div class="solution-chart" aria-label="Custos agregados por microrregião">
+                        <i style="height:72%"></i><i style="height:48%"></i><i style="height:82%"></i><i style="height:61%"></i><i style="height:69%"></i><i style="height:55%"></i>
+                      </div>
+                      <div class="solution-screen-note">Agregado anonimizado · n ≥ 20</div>
+                    </section>
+                  </div>
+                  <div class="solution-api"><span>GET /v1/benchmarks/soja</span><b>API ONLINE</b></div>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
-        <div class="thesis">Quem paga primeiro é a instituição. O produtor entra de graça: USDC já no 1º ciclo aceito; o painel só depois de 3 ciclos seguidos — para não copiar o dado e sumir.</div>
+        <div class="thesis">Dado aprovado gera recompensa. A identidade não vira produto.</div>
       </div>
     </section>
 
-    <!-- 4 · PRODUTO -->
-    <section class="slide">
+    <!-- 5 · CURADORIA -->
+    <section class="slide flow-slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Pablo" title="Pablo">P</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="10" data-placeholder="O que falar neste slide…">Antes de entrar na base, cada contribuição passa por duas camadas de curadoria. Primeiro, o sistema verifica campos incompletos, duplicidades e valores fora de limites plausíveis. Depois, uma pessoa capacitada revisa o contexto da safra e confirma se aquela informação é coerente. Se houver dúvida, o dado volta ao produtor para correção. Somente após a validação automática e humana ele entra no agregado e libera a recompensa em Solana. Assim, não pagamos por quantidade de formulários. Recompensamos informação útil e confiável.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
       <div class="slide-inner">
         <div class="section-head">
-          <div class="eyebrow">Produto</div>
-          <h2>Adubo 25% acima da média. Esse é o número.</h2>
+          <div class="eyebrow">Curadoria</div>
+          <h2>Primeiro validamos o dado. Depois liberamos a recompensa.</h2>
         </div>
-        <div class="callout">
-          <div class="bench">
-            <div class="headrow"><span class="dot-lg"></span><span>Painel · soja · Passo Fundo · safra 25/26</span></div>
-            <table>
-              <thead><tr><th>Item</th><th>Você</th><th>Região</th><th>Δ</th></tr></thead>
-              <tbody>
-                <tr><td>Adubo</td><td>R$ 1.500/ha</td><td>R$ 1.200/ha</td><td class="up">+25%</td></tr>
-                <tr><td>Defensivos</td><td>R$ 820/ha</td><td>R$ 850/ha</td><td class="down">−4%</td></tr>
-                <tr><td>Produtividade</td><td>72 sc/ha</td><td>68,5 sc/ha</td><td class="down">+5%</td></tr>
-              </tbody>
-            </table>
-            <div class="foot">Seed da demo — Passo Fundo × soja. Não é tração nem usuário real.</div>
-          </div>
-          <div class="callout-list">
-            <div class="callout-item"><span class="ico">01</span><p><strong>O produtor leva o +25% ao fornecedor.</strong> Argumento de mesa, não estimativa de safra passada.</p></div>
-            <div class="callout-item"><span class="ico">02</span><p><strong>A instituição vê o mesmo agregado, completo.</strong> Custo e produtividade por região × cultura — o que precifica crédito e seguro.</p></div>
-            <div class="callout-item"><span class="ico">03</span><p><strong>Conta no app, não cripto na cara.</strong> Wallet no aparelho, gas patrocinado. O produtor vê o +25% — não a seed.</p></div>
+        <div class="slide-main">
+          <div class="flow flow-distributed">
+            <div class="flow-item"><span class="n">01 · envio</span><img class="card-thumb" src="./slide-cards-safra.jpg" alt=""><h4>Dados recebidos</h4><p class="mono">Safra · solo · clima · custos</p></div>
+            <div class="flow-item"><span class="n">02 · triagem</span><img class="card-thumb" src="./slide-cards-codigo.jpg" alt=""><h4>Validação automática</h4><p class="mono">Formato · duplicidade · limites</p></div>
+            <div class="flow-item"><span class="n">03 · curadoria</span><img class="card-thumb" src="./slide-cards-curadoria.jpg" alt=""><h4>Validação humana</h4><p class="mono">Contexto · coerência · exceções</p></div>
+            <div class="flow-item"><span class="n">04 · decisão</span><img class="card-thumb" src="./slide-cards-dados.jpg" alt=""><h4>Aprovar ou corrigir</h4><p class="mono">Aceite · retorno</p></div>
+            <div class="flow-item"><span class="n">05 · recompensa</span><img class="card-thumb" src="./slide-cards-negocio.jpg" alt=""><h4>Pagamento liberado</h4><p class="mono">Solana após aprovação</p></div>
           </div>
         </div>
+        <div class="thesis">Qualidade aprovada vale mais que volume enviado.</div>
       </div>
     </section>
 
-    <!-- 5 · ARQUITETURA -->
-    <section class="slide">
+    <!-- 6 · VALOR PARA EMPRESAS -->
+    <section class="slide value-buyers-slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Felipe" title="Felipe">F</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="5" data-placeholder="O que falar neste slide…">Para quem compra os dados, o valor está em decidir com uma visão atual e regional do campo. Bancos e seguradoras conseguem avaliar risco com mais precisão. Cooperativas entendem melhor a demanda dos associados e planejam insumos, armazenagem e serviços. Já pesquisadores e empresas de IA ganham dados detalhados e validados para treinar modelos mais confiáveis. Cada comprador encontra uma vantagem diferente na mesma base de dados.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
+      <div class="slide-inner">
+        <div class="section-head">
+          <div class="eyebrow">Valor para quem compra</div>
+          <h2>O dado certo transforma risco em vantagem.</h2>
+        </div>
+        <div class="slide-main">
+          <div class="stat-row">
+            <div class="stat">
+              <img class="card-thumb" src="./slide-cards-negocio.jpg" alt="">
+              <div class="label">Bancos e seguradoras</div>
+              <div class="num">Precificar melhor</div>
+              <p class="mono">Crédito · seguro · risco</p>
+            </div>
+            <div class="stat">
+              <img class="card-thumb" src="./slide-cards-cooperativa.jpg" alt="">
+              <div class="label">Cooperativas</div>
+              <div class="num">Planejar melhor</div>
+              <p class="mono">Insumos · armazenagem · serviços</p>
+            </div>
+            <div class="stat">
+              <img class="card-thumb" src="./slide-cards-codigo.jpg" alt="">
+              <div class="label">IA e pesquisa</div>
+              <div class="num">Prever melhor</div>
+              <p class="mono">Treino · padrões · previsão</p>
+            </div>
+          </div>
+        </div>
+        <div class="thesis">Uma base. Três vantagens competitivas.</div>
+      </div>
+    </section>
+
+    <!-- 7 · MERCADO -->
+    <section class="slide flow-slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Pablo" title="Pablo">P</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="6" data-placeholder="O que falar neste slide…">O dinheiro não nasce da blockchain. Ele vem das empresas que assinam o painel, licenciam a API ou contratam estudos específicos. O pagamento entra em reais e a AgroBench emite a nota fiscal. Desse valor saem os impostos, os custos da operação e uma parcela destinada às recompensas. Após a safra, os dados aprovados geram o pagamento ao produtor em Solana, com a taxa da rede bancada pela AgroBench. O que sobra depois de impostos, recompensas e operação é a nossa margem. Assim, quanto mais valiosa fica a base, mais as empresas ganham precisão, mais o produtor é recompensado e mais a AgroBench cresce.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
+      <div class="slide-inner">
+        <div class="section-head">
+          <div class="eyebrow">Modelo de receita</div>
+          <h2>A instituição paga pelo acesso. <br> O produtor recebe por gerar valor.</h2>
+        </div>
+        <div class="slide-main">
+          <div class="context-bar">
+            <span class="k">De onde vem</span>
+            <span class="v">Assinatura do painel · licenciamento da API · estudos e recortes sob demanda</span>
+          </div>
+          <div class="flow flow-distributed">
+            <div class="flow-item"><span class="n">01 · entrada</span><img class="card-thumb" src="./slide-cards-negocio.jpg" alt=""><h4>Cliente paga</h4><p class="mono">Real · mensal · anual · projeto</p></div>
+            <div class="flow-item"><span class="n">02 · fiscal</span><img class="card-thumb" src="./slide-cards-fiscal.jpg" alt=""><h4>Impostos</h4><p class="mono">Nota fiscal · tributos</p></div>
+            <div class="flow-item"><span class="n">03 · divisão</span><img class="card-thumb" src="./slide-cards-dados.jpg" alt=""><h4>Fundo de recompensa</h4><p class="mono">Parcela da receita líquida</p></div>
+            <div class="flow-item"><span class="n">04 · safra</span><img class="card-thumb" src="./slide-cards-safra.jpg" alt=""><h4>Produtor recebe</h4><p class="mono">Solana · taxa patrocinada</p></div>
+            <div class="flow-item"><span class="n">05 · resultado</span><img class="card-thumb" src="./slide-cards-codigo.jpg" alt=""><h4>Margem AgroBench</h4><p class="mono">Receita − custos</p></div>
+          </div>
+        </div>
+        <div class="thesis">Lucro = receita − impostos − recompensas − operação.</div>
+      </div>
+    </section>
+
+    <!-- 8 · ARQUITETURA -->
+    <section class="slide architecture-slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Felipe" title="Felipe">F</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="7" data-placeholder="O que falar neste slide…">O fluxo técnico começa no aplicativo, onde o produtor registra os dados sem precisar lidar com seed phrase ou pagar gas. Antes de enviar o conteúdo, o app gera seu hash e grava esse commit na Solana. O registro imutável cria prova de anterioridade: permite demonstrar que aquele conteúdo já existia naquele momento e detectar qualquer alteração posterior, sem publicar o dado individual. Só depois da confirmação do commit os dados cifrados seguem para curadoria e agregação off-chain por microrregião. Na arquitetura alvo, os fundos ficam mantidos ou condicionados por um contrato inteligente de escrow; quando a validação aprova a contribuição, o contrato libera automaticamente a recompensa para a carteira Solana simplificada do produtor, com a taxa patrocinada pela AgroBench. O estado atual precisa ficar claro: o explorer já mostra o Memo de commit e a transferência da treasury na Devnet. O programa de escrow em Anchor existe no disco, mas seu deploy ainda está pendente; portanto, a garantia automática por escrow é arquitetura alvo, não funcionalidade implantada. TEE, CAR e o pagamento completo também continuam mock do MVP — não estamos em mainnet.</div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
       <div class="slide-inner">
         <div class="section-head">
           <div class="eyebrow">Arquitetura</div>
-          <h2>O hash vai para a chain primeiro. O USDC, depois.</h2>
+          <h2>Prova antes do dado. Pagamento condicionado à validação.</h2>
         </div>
-        <div class="flow">
-          <div class="flow-item"><span class="n">01</span><h4>Custo da safra</h4><p>O produtor registra no app. Wallet no aparelho, sem seed phrase.</p></div>
-          <div class="flow-item"><span class="n">02</span><h4>Commit</h4><p>O hash do dado vai on-chain antes do envio. Não dá para escolher o número depois.</p></div>
-          <div class="flow-item"><span class="n">03</span><h4>Reveal</h4><p>O custo cifrado entra no agregado da microrregião. O valor individual não vira público.</p></div>
-          <div class="flow-item"><span class="n">04</span><h4>Painel + USDC</h4><p>Compara de graça. Recompensa na wallet — visível no explorer.</p></div>
-          <div class="flow-item"><span class="n">05</span><h4>Instituição paga</h4><p>Assina o agregado. A receita do desenho volta a quem contribuiu.</p></div>
+        <div class="slide-main">
+          <div class="architecture-flow" aria-label="Fluxo arquitetural do commit ao pagamento">
+            <article class="architecture-card">
+              <span class="card-step">01</span>
+              <h3>App gera o hash antes do envio</h3>
+              <span class="card-state">Aplicativo · origem</span>
+            </article>
+            <article class="architecture-card chain">
+              <span class="card-step">02</span>
+              <h3>Commit imutável prova anterioridade</h3>
+              <span class="card-state">Solana Devnet · funcionando</span>
+            </article>
+            <article class="architecture-card">
+              <span class="card-step">03</span>
+              <h3>Curadoria valida dados cifrados</h3>
+              <span class="card-state">Off-chain · agregado regional</span>
+            </article>
+            <article class="architecture-card chain">
+              <span class="card-step">04</span>
+              <h3>Escrow libera fundos após aprovação</h3>
+              <span class="card-state">Contrato inteligente · validação</span>
+            </article>
+            <article class="architecture-card chain">
+              <span class="card-step">05</span>
+              <h3>Carteira Solana recebe com taxa patrocinada</h3>
+              <span class="card-state">Devnet · transferência existente</span>
+            </article>
+          </div>
         </div>
-        <div class="thesis">Por que Solana: settlement barato, USDC nativo, transação visível, gas patrocinado pelo protocolo.</div>
-        <div class="honesty"><strong>O que o explorer mostra hoje.</strong> Memo + USDC da treasury, na Devnet. Escrow Anchor existe no disco — deploy pendente. TEE, CAR e pagamento são mock. Não é mainnet.</div>
+        <div class="thesis">Commit verificável · dado individual fora da chain · pagamento condicionado à validação.</div>
       </div>
     </section>
 
-    <!-- 6 · MERCADO -->
-    <section class="slide">
-      <div class="slide-inner">
-        <div class="section-head">
-          <div class="eyebrow">Mercado</div>
-          <h2>Vendemos dado de precificação — não crédito rural.</h2>
+    <!-- 9 · CONCORRÊNCIA -->
+    <section class="slide competition-slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Pablo" title="Pablo">P</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="8" data-placeholder="O que falar neste slide…">O setor já tem boas fontes, mas cada uma responde a uma pergunta diferente. A CONAB produz estimativas oficiais em escala nacional e estadual, com pouca granularidade por insumo e microrregião durante o ciclo. O CEPEA acompanha preços e commodities, mas não mostra o custo privado que cada produtor teve na safra. As cooperativas já possuem relacionamento com o associado e originam crédito, porém esses dados permanecem fragmentados e normalmente não geram incentivo para quem contribui. A AgroBench ocupa outro recorte: dados privados de custo e produtividade, validados, agregados por região, com commit on-chain e recompensa ao produtor. Não estamos dizendo que ninguém coleta dados; estamos transformando esse recorte específico em uma base utilizável e comercializável.</div>
         </div>
-        <div class="context-bar">
-          <span class="k">Contexto</span>
-          <span class="v">Plano Safra 25/26: <strong class="mono">R$ 605,2 bi</strong> em crédito rural — volume que <em>depende</em> de precificação. Não é o mercado de assinatura do AgroBench.</span>
-        </div>
-        <div class="stat-row">
-          <div class="stat">
-            <div class="label">TAM</div>
-            <div class="num">Dado de precificação</div>
-            <p>Custo e produtividade regional para crédito e seguro agrícola. Categoria que o produto endereça — sem volume de receita inventado.</p>
-          </div>
-          <div class="stat">
-            <div class="label">SAM</div>
-            <div class="num">Sul · Sudeste</div>
-            <p>Recorte geográfico: bancos, seguradoras e cooperativas que já originam risco agrícola. Hipótese de comprador, não pipeline.</p>
-          </div>
-          <div class="stat">
-            <div class="label">SOM</div>
-            <div class="num">Passo Fundo</div>
-            <p>Hipótese explícita: cooperativas e bancos do RS como primeiro canal — cobertura por cultura na microrregião.</p>
-          </div>
-        </div>
-        <div class="thesis">Quem paga o dado é a instituição, não o produtor. Sem LOI, sem receita, sem usuário real neste slide.</div>
-      </div>
-    </section>
-
-    <!-- 7 · CONCORRÊNCIA -->
-    <section class="slide">
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
       <div class="slide-inner">
         <div class="section-head">
           <div class="eyebrow">Concorrência</div>
           <h2>CONAB e CEPEA já compilam. O nosso recorte é outro.</h2>
         </div>
-        <div class="vs-grid">
-          <div class="vs-card">
-            <span class="who">Público</span>
-            <h3>CONAB</h3>
-            <p>Estimativa oficial de safra. Nacional e estadual — pouco granular por insumo, na microrregião, neste ciclo.</p>
-          </div>
-          <div class="vs-card">
-            <span class="who">Índice</span>
-            <h3>CEPEA</h3>
-            <p>Preço de commodity. Não é o custo privado do adubo que o produtor pagou na sua região.</p>
-          </div>
-          <div class="vs-card">
-            <span class="who">Canal</span>
-            <h3>Cooperativas</h3>
-            <p>Já têm o associado e já originam crédito. O dado do sócio raramente vira mercado — nem incentivo para quem contribui.</p>
-          </div>
-          <div class="vs-card us">
-            <span class="who">AgroBench</span>
-            <h3>Agregado privado + USDC</h3>
-            <p>Custo da safra, por região, com commit on-chain e recompensa em USDC. Não “dado que ninguém compilou” — recorte que os três acima não vendem.</p>
+        <div class="slide-main">
+          <div class="vs-grid">
+            <div class="vs-card">
+              <span class="who">Público</span>
+              <img class="card-thumb" src="./slide-cards-safra.jpg" alt="">
+              <h3>CONAB</h3>
+              <p class="mono">Safra · país · estado</p>
+            </div>
+            <div class="vs-card">
+              <span class="who">Índice</span>
+              <img class="card-thumb" src="./slide-cards-fiscal.jpg" alt="">
+              <h3>CEPEA</h3>
+              <p class="mono">Preços · commodities</p>
+            </div>
+            <div class="vs-card us">
+              <span class="who">AgroBench</span>
+              <img class="card-thumb" src="./slide-cards-dados.jpg" alt="">
+              <h3>Dado privado regional</h3>
+              <p class="mono">Curadoria · agregado · recompensa</p>
+            </div>
           </div>
         </div>
-        <div class="thesis">Ser justo: o setor já tem número público. Falta o agregado privado da safra — e alguém que pague o produtor por ele.</div>
+        <div class="thesis">Não substituímos as fontes públicas. Preenchemos o recorte que falta.</div>
       </div>
     </section>
 
-    <!-- 8 · EQUIPE -->
-    <section class="slide">
+    <!-- 10 · EQUIPE -->
+    <section class="slide team-slide">
+      <span class="presenter-marker" role="img" aria-label="Apresentador: Pablo" title="Pablo">P</span>
+      <aside class="cue">
+        <div class="cue-card">
+          <div class="cue-label">Falar</div>
+          <div class="cue-body" contenteditable="true" data-cue="9" data-placeholder="O que falar neste slide…"></div>
+        </div>
+        <div class="cue-dot" aria-hidden="true"></div>
+      </aside>
       <div class="slide-inner">
-        <div class="section-head">
-          <div class="eyebrow">Equipe</div>
-          <h2>Três pessoas no produto. O canal está na região.</h2>
-          <p>Backend, interface e design da demo. Go-to-market = cooperativas da microrregião — pedido, não contrato.</p>
+        <div class="team-header">
+          <div class="eyebrow team-eyebrow">Equipe</div>
+          <h2 class="team-title">Equipe por trás da AgroBench:</h2>
         </div>
         <div class="team">
           <div class="person">
-            <span class="role">Backend</span>
-            <h3>Felipe Meneguzzi</h3>
-            <p>API Go, Postgres e adapter Solana Devnet.</p>
-            <div class="stack">
-              <span class="pill">Go</span><span class="pill">Postgres</span><span class="pill">Solana Devnet</span>
+            <img class="person-photo" src="./foto_felipe.jpg" alt="Felipe Meneguzzi">
+            <div class="person-info">
+              <h3>Felipe Meneguzzi</h3>
+              <span class="role">Backend Engineer</span>
             </div>
           </div>
           <div class="person">
-            <span class="role">Frontend</span>
-            <h3>Pablo Oliveira</h3>
-            <p>App Vue: produtor, instituição e admin.</p>
-            <div class="stack">
-              <span class="pill">Vue 3 + Vite</span><span class="pill">Vuetify</span>
+            <img class="person-photo" src="./foto_pablo.jpg" alt="Pablo Oliveira">
+            <div class="person-info">
+              <h3>Pablo Oliveira</h3>
+              <span class="role">Frontend Engineer</span>
             </div>
           </div>
-          <div class="person">
-            <span class="role">Designer e frontend</span>
-            <h3>Gabriela Lenz</h3>
-            <p>Design e interface da demo de banca.</p>
-            <div class="stack">
-              <span class="pill">Design</span><span class="pill">Frontend</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 9 · PRÓXIMOS PASSOS -->
-    <section class="slide">
-      <div class="slide-inner">
-        <div class="section-head">
-          <div class="eyebrow">Próximos passos</div>
-          <h2>A cooperativa fecha as duas pontas.</h2>
-        </div>
-        <div class="roadmap">
-          <div class="step"><span class="n">01 · canal</span><h4>Cooperativas do RS, Passo Fundo</h4><p>Já têm o associado e já originam crédito. Recrutam o produtor e compram o agregado — sem fingir contrato assinado.</p></div>
-          <div class="step"><span class="n">02 · ovo e galinha</span><h4>Quem paga primeiro</h4><p>A instituição. O produtor entra de graça. USDC no 1º ciclo; painel só após 3 ciclos seguidos. Cobertura na microrregião antes de vender o relatório.</p></div>
-          <div class="step"><span class="n">03 · protocolo</span><h4>Escrow na Devnet</h4><p>O programa Anchor está no disco. Próximo passo operacional: deploy. Há um hash CPF → wallet, sujeito à LGPD — não vendemos “zero exposição”.</p></div>
-        </div>
-        <div class="honesty" style="margin-top:22px"><strong>Pedido, não piloto.</strong> Ainda não há cooperativa assinada. O recorte é Passo Fundo — o mesmo da banca.</div>
-      </div>
-    </section>
-
-    <!-- 10 · CTA -->
-    <section class="slide closing">
-      <div class="slide-inner">
-        <div class="eyebrow">O pedido</div>
-        <h2>Demo agora. Apollo depois. Piloto em Passo Fundo.</h2>
-        <p class="lede">Cinco minutos sem pergunta. O número do adubo já está no app. A chain está na Devnet. O piloto ainda é o pedido — não um contrato.</p>
-        <div class="asks">
-          <div class="ask">
-            <span class="n">01</span>
-            <h3>Demo ao vivo</h3>
-            <p>Commit do produtor e USDC no explorer — Memo + transfer da treasury, hoje.</p>
-          </div>
-          <div class="ask">
-            <span class="n">02</span>
-            <h3>Incubação Apollo</h3>
-            <p>Mentoria no UPF Parque para o primeiro ciclo com cooperativa da microrregião.</p>
-          </div>
-          <div class="ask">
-            <span class="n">03</span>
-            <h3>Piloto em Passo Fundo</h3>
-            <p>Abrir a porta com uma cooperativa local. É o ask — ainda não está assinado.</p>
-          </div>
-        </div>
-        <div class="closing-meta">
-          <span class="pill">Passo Fundo, RS</span>
-          <span class="pill">Solana Devnet · USDC</span>
-          <span class="pill">AgroBench</span>
         </div>
       </div>
     </section>
@@ -620,6 +1305,22 @@
   var nextBtn = document.getElementById('nextBtn');
   var index = 0;
 
+  slides.forEach(function(slide){
+    Array.prototype.forEach.call(slide.querySelectorAll('.slide-logo'), function(existingLogo){
+      existingLogo.remove();
+    });
+  });
+  for (var logoIndex = 1; logoIndex < slides.length; logoIndex++){
+    var slide = slides[logoIndex];
+    var logo = document.createElement('img');
+    logo.className = 'slide-logo';
+    logo.src = './logo.png';
+    logo.alt = 'AgroBench';
+    logo.width = 104;
+    logo.height = 104;
+    slide.insertBefore(logo, slide.firstChild);
+  }
+
   totEl.textContent = String(total).padStart(2,'0');
 
   for (var i = 0; i < total; i++){
@@ -637,7 +1338,7 @@
     progressEl.style.width = ((index+1) / total * 100) + '%';
     dots.forEach(function(d, i){ d.classList.toggle('active', i === index); });
     prevBtn.disabled = index === 0;
-    nextBtn.disabled = index === total - 1;
+    nextBtn.disabled = false;
     history.replaceState(null, '', '#slide-' + (index+1));
   }
 
@@ -646,8 +1347,12 @@
     render();
   }
 
+  function goNext(){
+    goTo(index === total - 1 ? 0 : index + 1);
+  }
+
   prevBtn.addEventListener('click', function(){ goTo(index - 1); });
-  nextBtn.addEventListener('click', function(){ goTo(index + 1); });
+  nextBtn.addEventListener('click', goNext);
 
   // --- tela cheia: F11 (ou F / botão) entra via Fullscreen API; Esc sai ---
   var root = document.documentElement;
@@ -668,7 +1373,11 @@
   fsBtn.addEventListener('click', toggleFullscreen);
 
   window.addEventListener('keydown', function(e){
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); goTo(index + 1); }
+    if (e.target && (e.target.isContentEditable || e.target.closest && e.target.closest('[contenteditable]'))){
+      e.stopPropagation();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); goNext(); }
     else if (e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); goTo(index - 1); }
     else if (e.key === 'Home'){ goTo(0); }
     else if (e.key === 'End'){ goTo(total - 1); }
@@ -680,12 +1389,24 @@
   slidesEl.addEventListener('touchend', function(e){
     if (touchX === null) return;
     var dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 50){ goTo(index + (dx < 0 ? 1 : -1)); }
+    if (Math.abs(dx) > 50){ dx < 0 ? goNext() : goTo(index - 1); }
     touchX = null;
   }, { passive: true });
 
   var hash = window.location.hash.match(/^#slide-(\d+)$/);
   if (hash){ goTo(parseInt(hash[1], 10) - 1); } else { render(); }
+
+  var cueStore = {};
+  try { cueStore = JSON.parse(localStorage.getItem('agrobench-cues') || '{}'); } catch (err){ cueStore = {}; }
+  Array.prototype.forEach.call(document.querySelectorAll('.cue-body'), function(el){
+    var id = el.getAttribute('data-cue');
+    if (cueStore[id] != null) el.innerHTML = cueStore[id];
+    el.addEventListener('input', function(){
+      cueStore[id] = el.innerHTML;
+      try { localStorage.setItem('agrobench-cues', JSON.stringify(cueStore)); } catch (e2){}
+    });
+    el.addEventListener('keydown', function(e){ e.stopPropagation(); });
+  });
 })();
 </script>
 </body>
